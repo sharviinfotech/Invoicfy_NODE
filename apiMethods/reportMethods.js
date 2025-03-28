@@ -1438,7 +1438,8 @@ module.exports = (() => {
 
             try {
                 console.log("req.body", req.body)
-                const { chargesName } = req.body;
+                const { serviceName,customerName,companyName ,PoNumber} = req.body;
+                
 
                 const counter = await chargesCount.findOneAndUpdate(
                     { name: "chargesUniqueId" },
@@ -1448,7 +1449,10 @@ module.exports = (() => {
                 const chargesUniqueId = counter.value;
                 console.log("chargesUniqueId", chargesUniqueId);
                 const chargesPayload = new chargesCreation({
-                    chargesName,
+                    serviceName,
+                    customerName,
+                    companyName,
+                    PoNumber,
                     chargesUniqueId
 
                 })
@@ -1468,6 +1472,29 @@ module.exports = (() => {
                     status: 500
                 })
 
+            }
+        },
+        UpdateSubmit: async(req,res) =>{
+            try {
+                console.log('req.body',req.body)
+                const { chargesUniqueId } = req.body;
+                const updateChargesData = req.body;
+
+           
+
+                const updateChargesObj = await chargesCreation.findOneAndUpdate(
+                    { chargesUniqueId: chargesUniqueId },
+                    { $set: updateChargesData },
+                    { new: true, runValidators: true }
+                );
+
+                if (!updateChargesObj) {
+                    return res.status(404).json({ message: "Service Charges Not Found", status: 404 });
+                }
+
+                res.status(200).json({ message: "Service Charges  Updated Successfully", data: updateChargesObj, status: 200 });
+            } catch (error) {
+                res.status(500).json({ message: "Update Failed", status: 500, error: error.message });
             }
         },
         listOfCharges: async (req, res) => {
