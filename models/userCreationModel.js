@@ -178,16 +178,8 @@ const invoiceTaxInvoiceCountSchema = new mongoose.Schema({
 });
 
 
-const chargesSchema=new mongoose.Schema({
+const serviceSchema=new mongoose.Schema({
     description: {
-        type: String,
-        required: false,
-    },
-    units: {
-        type: String,
-        required: false,
-    },
-    rate: {
         type: String,
         required: false,
     },
@@ -293,7 +285,7 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        ProformaTypeOfAircraft: {
+        ProformaTypeOfServices: {
             type: String,
             required: true,
         },
@@ -301,28 +293,25 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: false,
         },    
-        ProformaSeatingCapasity:{
-            type: Number,
+        ProformaBankName:{
+            type: String,
             required: true,
         },
-        startBookingDateOfJourny:{
-            type: Date,
+        ProformaBankAccountNumber:{
+            type: String,
             required: true,
         },
-        endBookingDateOfJourny:{
-            type: Date,
+        ProformaIFSCcode:{
+            type: String,
             required: true,
         },
-        BookingSector:{
+        ProformaAddress:{
             type:String,
             required: true,
         },
-        BookingBillingFlyingTime:{
-            type:String,
-            required: true,
-        }
+       
     },
-    chargesList: [chargesSchema],
+    serviceList: [serviceSchema],
     taxList: [taxSchema],
     subtotal:{
         type:Number,
@@ -532,7 +521,7 @@ const invoiceLayoutSchema = new mongoose.Schema({
             type: String,
             required: false,
         },
-        ProformaTypeOfAircraft: {
+        ProformaTypeOfService: {
             type: String,
             required: false,
         },
@@ -540,24 +529,24 @@ const invoiceLayoutSchema = new mongoose.Schema({
             type: String,
             required: false,
         },    
-        ProformaSeatingCapasity:{
-            type: Number,
-            required: false,
+        ProformaBankName:{
+            type: String,
+            required: true,
         },
-        BookingDateOfJourny:{
-            type:String,
-            required: false,
+        ProformaBankAccountNumber:{
+            type: String,
+            required: true,
         },
-        BookingSector:{
-            type:String,
-            required: false,
+        ProformaIFSCcode:{
+            type: String,
+            required: true,
         },
-        BookingBillingFlyingTime:{
+        ProformaAddress:{
             type:String,
-            required: false,
-        }
+            required: true,
+        },
     },
-    chargesList: [chargesSchema],
+    serviceList: [serviceSchema],
     taxList: [taxSchema],
     subtotal:{
         type:Number,
@@ -733,11 +722,22 @@ const chargesCreationSchema = new mongoose.Schema({
         required: true,
         unique:true
     } ,
-    chargesName:{
+    customerName:{
         type:String,
         required:true
     },
-   
+    companyName:{
+        type:String,
+        required:true
+    },
+    serviceName:{
+        type:String,
+        required:true
+    },
+    PoNumber:{
+        type:String,
+        required:true
+    },
 
 })
 const chargesCountSchema = new mongoose.Schema({

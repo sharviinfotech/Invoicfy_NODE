@@ -156,10 +156,10 @@ module.exports = (() => {
                 // const { invoiceHeader,fromName,fromEmail,fromAddress,fromMobileNumber, toName,toEmail,toAddress,toMobileNumber,toGstinNo,
                 //     toPan,invoiceNumber,invoiceDate,panNumber,gstinNo,typeOfAircraft,notes } = req.body
 
-                const { header, chargesList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
+                const { header, serviceList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
-                    pqStatus, pqUniqueId
+                    pqStatus, pqUniqueId,ProformaBankAccountNumber,ProformaIFSCcode,ProformaTypeOfServices
                 } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -188,18 +188,18 @@ module.exports = (() => {
                         throw new Error("ProformaInvoiceDate is required.");
                     }
 
-                    if (header.startBookingDateOfJourny) {
-                        startBookingDate = moment(header.startBookingDateOfJourny, "DD-MM-YYYY").toDate();
-                        console.log("Converted startBookingDate :", startBookingDate);
-                    } else {
-                        throw new Error("ProformaInvoiceDate is required.");
-                    }
-                    if (header.endBookingDateOfJourny) {
-                        endBookingDate = moment(header.endBookingDateOfJourny, "DD-MM-YYYY").toDate();
-                        console.log("Converted endBookingDate :", endBookingDate);
-                    } else {
-                        throw new Error("ProformaInvoiceDate is required.");
-                    }
+                    // if (header.startBookingDateOfJourny) {
+                    //     startBookingDate = moment(header.startBookingDateOfJourny, "DD-MM-YYYY").toDate();
+                    //     console.log("Converted startBookingDate :", startBookingDate);
+                    // } else {
+                    //     throw new Error("ProformaInvoiceDate is required.");
+                    // }
+                    // if (header.endBookingDateOfJourny) {
+                    //     endBookingDate = moment(header.endBookingDateOfJourny, "DD-MM-YYYY").toDate();
+                    //     console.log("Converted endBookingDate :", endBookingDate);
+                    // } else {
+                    //     throw new Error("ProformaInvoiceDate is required.");
+                    // }
                     console.log("counter", counter)
                     invoiceReferenceNo = counter.value;
                     start = counter.startWith;
@@ -239,18 +239,18 @@ module.exports = (() => {
                         throw new Error("ProformaInvoiceDate is required.");
                     }
 
-                    if (header.startBookingDateOfJourny) {
-                        startBookingDate = moment(header.startBookingDateOfJourny, "DD-MM-YYYY").toDate();
-                        console.log("Converted startBookingDate :", startBookingDate);
-                    } else {
-                        throw new Error("ProformaInvoiceDate is required.");
-                    }
-                    if (header.endBookingDateOfJourny) {
-                        endBookingDate = moment(header.endBookingDateOfJourny, "DD-MM-YYYY").toDate();
-                        console.log("Converted endBookingDate :", endBookingDate);
-                    } else {
-                        throw new Error("ProformaInvoiceDate is required.");
-                    }
+                    // if (header.startBookingDateOfJourny) {
+                    //     startBookingDate = moment(header.startBookingDateOfJourny, "DD-MM-YYYY").toDate();
+                    //     console.log("Converted startBookingDate :", startBookingDate);
+                    // } else {
+                    //     throw new Error("ProformaInvoiceDate is required.");
+                    // }
+                    // if (header.endBookingDateOfJourny) {
+                    //     endBookingDate = moment(header.endBookingDateOfJourny, "DD-MM-YYYY").toDate();
+                    //     console.log("Converted endBookingDate :", endBookingDate);
+                    // } else {
+                    //     throw new Error("ProformaInvoiceDate is required.");
+                    // }
                     console.log("pqSameforTAX", pqSameforTAX)
                     // invoiceReferenceNo = counter.value;
                     invoiceReferenceNo = pqSameforTAX;
@@ -289,13 +289,12 @@ module.exports = (() => {
                     ProformaInvoiceDate: invoiceDateObj,
                     ProformaPan: header.ProformaPan,
                     ProformaGstNumber: header.ProformaGstNumber,
-                    ProformaTypeOfAircraft: header.ProformaTypeOfAircraft,
-                    ProformaSeatingCapasity: header.ProformaSeatingCapasity,
+                    ProformaTypeOfServices: header.ProformaTypeOfServices,
+                     ProformaBankName: header.ProformaBankName,
                     notes: header.notes,
-                    startBookingDateOfJourny: startBookingDate,
-                    endBookingDateOfJourny: endBookingDate,
-                    BookingSector: header.BookingSector,
-                    BookingBillingFlyingTime: header.BookingBillingFlyingTime,
+                    ProformaBankAccountNumber: header.ProformaBankAccountNumber,
+                    ProformaIFSCcode:header.ProformaIFSCcode,
+                    ProformaAddress: header.ProformaAddress,
 
                 }
                 // const bankObj={
@@ -310,7 +309,7 @@ module.exports = (() => {
                 const invoiceData = {
                     originalUniqueId,
                     header: headerObj,
-                    chargesList,
+                    serviceList,
                     taxList,
                     invoiceReferenceNo,
                     subtotal,
@@ -332,7 +331,10 @@ module.exports = (() => {
                     reviewedReSubmited,
                     pqSameforTAX,
                     pqStatus,
-                    pqUniqueId
+                    pqUniqueId,
+                    ProformaBankAccountNumber,
+                    ProformaIFSCcode,
+                    ProformaTypeOfServices
                 };
 
               
@@ -438,29 +440,30 @@ module.exports = (() => {
                             });
                         }
                     }
+                    
 
-                    if (updateData.header.startBookingDateOfJourny) {
-                        const parsedDate = moment(updateData.header.startBookingDateOfJourny, "DD-MM-YYYY", true);
-                        if (parsedDate.isValid()) {
-                            updateData.header.startBookingDateOfJourny = parsedDate.toISOString(); // Convert to ISO format
-                        } else {
-                            return res.status(400).json({
-                                message: "Invalid startBookingDateOfJourny format. Use 'DD-MM-YYYY'.",
-                                status: 400
-                            });
-                        }
-                    }
-                    if (updateData.header.endBookingDateOfJourny) {
-                        const parsedDate = moment(updateData.header.endBookingDateOfJourny, "DD-MM-YYYY", true);
-                        if (parsedDate.isValid()) {
-                            updateData.header.endBookingDateOfJourny = parsedDate.toISOString(); // Convert to ISO format
-                        } else {
-                            return res.status(400).json({
-                                message: "Invalid endBookingDateOfJourny format. Use 'DD-MM-YYYY'.",
-                                status: 400
-                            });
-                        }
-                    }
+                    // if (updateData.header.startBookingDateOfJourny) {
+                    //     const parsedDate = moment(updateData.header.startBookingDateOfJourny, "DD-MM-YYYY", true);
+                    //     if (parsedDate.isValid()) {
+                    //         updateData.header.startBookingDateOfJourny = parsedDate.toISOString(); // Convert to ISO format
+                    //     } else {
+                    //         return res.status(400).json({
+                    //             message: "Invalid startBookingDateOfJourny format. Use 'DD-MM-YYYY'.",
+                    //             status: 400
+                    //         });
+                    //     }
+                    // }
+                //     if (updateData.header.endBookingDateOfJourny) {
+                //         const parsedDate = moment(updateData.header.endBookingDateOfJourny, "DD-MM-YYYY", true);
+                //         if (parsedDate.isValid()) {
+                //             updateData.header.endBookingDateOfJourny = parsedDate.toISOString(); // Convert to ISO format
+                //         } else {
+                //             return res.status(400).json({
+                //                 message: "Invalid endBookingDateOfJourny format. Use 'DD-MM-YYYY'.",
+                //                 status: 400
+                //             });
+                //         }
+                //     }
                 }
 
                 const updatedInvoice = await invoice.findOneAndUpdate(
@@ -505,27 +508,27 @@ module.exports = (() => {
                 const { userActivity } = req.body;
                 console.log("userActivity", userActivity);
                 var invoices
-                if (userActivity == 'MD') {
+                // if (userActivity == 'MD') {
 
-                    const listOfPQ = await invoice.find({ proformaCardHeaderId: 'PQ' });
-                    invoices = listOfPQ.filter(invoice => invoice.status === "Pending");
-                    console.log("IF MD")
-
-
-                }
-                else if (userActivity == 'ACCOUNTS') {
-
-                    const listOfPQ = await invoice.find({ proformaCardHeaderId: 'PQ' });
-                    invoices = listOfPQ.filter(invoice => invoice.status === "Pending");
-                    console.log("IF MD")
+                //     const listOfPQ = await invoice.find({ proformaCardHeaderId: 'PQ' });
+                //     invoices = listOfPQ.filter(invoice => invoice.status === "Pending");
+                //     console.log("IF MD")
 
 
-                }
-                else {
+                // }
+                // else if (userActivity == 'ACCOUNTS') {
+
+                //     const listOfPQ = await invoice.find({ proformaCardHeaderId: 'PQ' });
+                //     invoices = listOfPQ.filter(invoice => invoice.status === "Pending");
+                //     console.log("IF MD")
+
+
+                // }
+                // else {
                     invoices = await invoice.find();
                     console.log("Else ADMIN")
 
-                }
+                // }
 
                 console.log('invoices', invoices)
                 if (!invoices || invoices.length === 0) {
@@ -543,8 +546,8 @@ module.exports = (() => {
                     header: {
                         ...inv.header,
                         ProformaInvoiceDate: moment(inv.header.ProformaInvoiceDate).format("DD-MM-YYYY"),
-                        startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
-                        endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
+                        // startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
+                        // endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
                     }
                 }));
 
@@ -568,7 +571,7 @@ module.exports = (() => {
         invoiceLayoutSubmit: async (req, res) => {
             console.log('request body', req.body);
             try {
-                const { invoiceLayoutId, header, chargesList, taxList, subtotal, grandTotal, status } = req.body;
+                const { invoiceLayoutId, header, serviceList, taxList, subtotal, grandTotal, status } = req.body;
                 console.info("req.body", req.body);
 
                 const headerObj = {
@@ -585,13 +588,12 @@ module.exports = (() => {
                     ProformaInvoiceDate: header.ProformaInvoiceDate,
                     ProformaPan: header.ProformaPan,
                     ProformaGstNumber: header.ProformaGstNumber,
-                    ProformaTypeOfAircraft: header.ProformaTypeOfAircraft,
-                    ProformaSeatingCapasity: header.ProformaSeatingCapasity,
+                    ProformaTypeOfServices: header.ProformaTypeOfAircraft,
+                    ProformaBankName: header. ProformaBankName,
                     notes: header.notes,
-                    startBookingDateOfJourny: header.startBookingDateOfJourny,
-                    startBookingDateOfJourny: header.startBookingDateOfJourny,
-                    endBookingDateOfJourny: header.endBookingDateOfJourny,
-                    BookingBillingFlyingTime: header.BookingBillingFlyingTime,
+                    ProformaBankAccountNumber: ProformaBankAccountNumber,
+                    ProformaIFSCode: ProformaIFSCode,
+                    ProformaAddress: header. ProformaAddress,
                 };
 
 
@@ -610,7 +612,7 @@ module.exports = (() => {
                 const newLayout = new layout({
                     invoiceLayoutId,
                     header: headerObj,
-                    chargesList,
+                    serviceList,
                     taxList,
                     subtotal,
                     grandTotal,
@@ -1521,8 +1523,8 @@ module.exports = (() => {
                     header: {
                         ...inv.header,
                         ProformaInvoiceDate: moment(inv.header.ProformaInvoiceDate).format("DD-MM-YYYY"),
-                        startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
-                        endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
+                        // startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
+                        // endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
                     }
                 }));
 
@@ -1532,8 +1534,8 @@ module.exports = (() => {
                     header: {
                         ...inv.header,
                         ProformaInvoiceDate: moment(inv.header.ProformaInvoiceDate).format("DD-MM-YYYY"),
-                        startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
-                        endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
+                        // startBookingDateOfJourny: moment(inv.header.startBookingDateOfJourny).format("DD-MM-YYYY"),
+                        // endBookingDateOfJourny: moment(inv.header.endBookingDateOfJourny).format("DD-MM-YYYY")
                     }
                 }));
 

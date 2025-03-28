@@ -14,7 +14,8 @@ module.exports = (() => {
     router.get('/invoice/countryList', userHandler.countryList);
     router.get('/invoice/stateList', userHandler.stateList);
     router.put('/updateInvoiceByReferenceNo/:referenceNo', userHandler.updateInvoice);
-    router.post('/invoice/getAllInvoices',userHandler.getTotalInvoice);
+    // router.post('/invoice/getAllInvoices',userHandler.getTotalInvoice);
+    router.get('/invoice/getAllInvoices',userHandler.getTotalInvoice);
     router.post('/invoice/invoiceTemplate',userHandler.invoiceLayout);
     router.get('/invoice/getInvoiceLayout',userHandler.getInvoiceLayout)
     router.post('/invoice/userNewCreation',userHandler.userCreationNew);
