@@ -1438,7 +1438,7 @@ module.exports = (() => {
 
             try {
                 console.log("req.body", req.body)
-                const { serviceName,customerName,companyName ,PoNumber} = req.body;
+                const { servicesName,customerName,companyName ,PoNumber} = req.body;
                 
 
                 const counter = await chargesCount.findOneAndUpdate(
@@ -1449,7 +1449,7 @@ module.exports = (() => {
                 const chargesUniqueId = counter.value;
                 console.log("chargesUniqueId", chargesUniqueId);
                 const chargesPayload = new chargesCreation({
-                    serviceName,
+                    servicesName,
                     customerName,
                     companyName,
                     PoNumber,

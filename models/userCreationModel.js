@@ -730,7 +730,7 @@ const chargesCreationSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    serviceName:{
+    servicesName:{
         type:String,
         required:true
     },
