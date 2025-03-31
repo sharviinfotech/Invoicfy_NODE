@@ -37,6 +37,13 @@ module.exports = (() => {
     router.get('/invoice/getAllNotification',userHandler.notification);
     router.post('/invoice/verifyedAndUpdated',userHandler.verifyed);
     router.post('/invoice/deteleGlobal',userHandler.deleteData);
+
+    router.post('/invoice/SaveCompanyCreation',userHandler.companyCreation);
+    router.post('/invoice/updateExitCompany',userHandler.companyUpdate);
+    router.get('/invoice/getAllCompanyList',userHandler.getAllCompany);
+
+
+
     console.log('enter route')
     // router.post('/', userHandler.createUser);
 

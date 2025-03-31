@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount,
-    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount } = require('../models/userCreationModel');
+    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount,companyCreate,companyCount } = require('../models/userCreationModel');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const moment = require('moment');
@@ -159,7 +159,7 @@ module.exports = (() => {
                 const { header, serviceList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
-                    pqStatus, pqUniqueId,ProformaBankAccountNumber,ProformaIFSCcode,ProformaTypeOfServices
+                    pqStatus, pqUniqueId,ProformaBankAccountNumber,ProformaIFSCcode,ProformaTypeOfServices,detailsCardAddress
                 } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -278,6 +278,7 @@ module.exports = (() => {
                 const headerObj = {
                     invoiceHeader: header.invoiceHeader,
                     invoiceImage: header.invoiceImage,
+                    ProformaCompanyName:header.ProformaCompanyName,
                     ProformaCustomerName: header.ProformaCustomerName,
                     ProformaAddress: header.ProformaAddress,
                     ProformaCity: header.ProformaCity,
@@ -294,7 +295,8 @@ module.exports = (() => {
                     notes: header.notes,
                     ProformaBankAccountNumber: header.ProformaBankAccountNumber,
                     ProformaIFSCcode:header.ProformaIFSCcode,
-                    ProformaAddress: header.ProformaAddress,
+                    detailsCardAddress: header.detailsCardAddress,
+
 
                 }
                 // const bankObj={
@@ -334,7 +336,8 @@ module.exports = (() => {
                     pqUniqueId,
                     ProformaBankAccountNumber,
                     ProformaIFSCcode,
-                    ProformaTypeOfServices
+                    ProformaTypeOfServices,
+                    detailsCardAddress
                 };
 
               
@@ -1643,6 +1646,12 @@ module.exports = (() => {
                     case "user":
                         deletedRecord = await userCreation.findOneAndDelete({ userUniqueId: globalId });
                         break;
+                    case "servicescharge":
+                        deletedRecord = await chargesCreation.findOneAndDelete({ chargesUniqueId: globalId });
+                        break;
+                        case "company":
+                        deletedRecord = await companyCreate.findOneAndDelete({ companyUniqueId: globalId });
+                        break;
                     default:
                         return res.status(400).json({ message: "Invalid table type", status: 400 });
                 }
@@ -1657,7 +1666,133 @@ module.exports = (() => {
                 console.error("Error in deleteGlobally:", error);
                 res.status(500).json({ message: "Deletion failed", status: 500, error: error.message });
             }
-        }
+        },
+        newCompanyCreation: async (req, res) => {
+            // console.log("newCompanyCreation ", req, res)
+            console.log("newCompanyCreation request received");
+            try {
+                
+                const { companyName, companyAddress, companyCity, companyState, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName,companyBankAccount_No,companyIFSCcode,companyBranchName } = req.body;
+
+                const counter = await companyCount.findOneAndUpdate(
+                    { name: "companyUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const companyUniqueId = counter.value;
+                console.log("companyUniqueId", companyUniqueId);
+                const companyPayload = new companyCreate({
+                    companyName,
+                    companyAddress,
+                    companyCity,
+                    companyState,
+                    companyPincode,
+                    companyGstNo,
+                    companyPanNo,
+                    companyEmail,
+                    companyFinanceContact,
+                    companyAlernativecontact,
+                    companyBankName,
+                    companyBankAccount_No,
+                    companyIFSCcode,
+                    companyBranchName,
+                    companyUniqueId
+
+                })
+
+                const NewCompanysList = await companyPayload.save()
+
+                res.status(200).json({
+                    message: "New Company Created Successfully",
+                    status: 200,
+                    data: NewCompanysList,
+                    companyUniqueId
+                })
+
+            } catch (error) {
+                console.error("Error in newCompanyCreation:", error);
+                res.status(500).json({
+                    message: "Failed to Save Company",
+                    status: 500,
+                    error: error.message
+                })
+            }
+        },
+        updateCompany: async (req, res) => {
+            console.log("req.params:", req.params, "req.body:", req.body);
+
+            try {
+                const companyUniqueId = Number(req.body.companyUniqueId); // Convert to number
+                if (isNaN(companyUniqueId)) {
+                    return res.status(400).json({
+                        message: "Invalid Customer ID",
+                        status: 400
+                    });
+                }
+
+                const updateObj = req.body;
+                console.log("companyUniqueId:", companyUniqueId);
+                console.log("updateObj:", updateObj);
+
+                const updateUserObj = await companyCreate.findOneAndUpdate(
+                    { companyUniqueId: companyUniqueId },
+                    { $set: updateObj },
+                    { new: true, runValidators: true }
+                );
+
+                console.log("updateUserObj:", updateUserObj);
+
+                if (!updateUserObj) {
+                    return res.status(404).json({
+                        message: "Company Not Found",
+                        status: 404
+                    });
+                }
+
+                res.status(200).json({
+                    message: "Company Data Updated Successfully",
+                    status: 200,
+                    updatedCompany: updateUserObj
+                });
+
+            } catch (error) {
+                console.error("Error updating company:", error);
+                res.status(500).json({
+                    message: "Failed to Update Company",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+        listOfCompany: async (req, res) => {
+            try {
+                const companyList = await companyCreate.find()
+
+                if (!companyList || companyList.length === 0) {
+                    return res.status(200).json({
+                        message: "No Data Available",
+                        companyList: [],
+                        status: 200
+                    })
+
+                }
+
+                res.status(200).json({
+                    message: "Company Data Fetched Successfully",
+                    data: companyList,
+                    status: 200
+                })
+
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to Fetch Company Data",
+                    error: error.message
+                })
+
+            }
+
+        },
+
 
 
 

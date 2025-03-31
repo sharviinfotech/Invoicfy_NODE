@@ -33,6 +33,9 @@ module.exports = (() => {
         notification:(req,res)=>userMethods.getNotification(req,res),
         verifyed:(req,res)=>userMethods.verifyedAndUpdated(req,res),
         deleteData:(req,res)=>userMethods.deleteGlobally(req,res),
+        companyCreation:(req,res)=>userMethods.newCompanyCreation(req,res),
+        companyUpdate:(req,res)=>userMethods.updateCompany(req,res),
+        getAllCompany:(req,res)=>userMethods.listOfCompany(req,res),
 
     };
 })();

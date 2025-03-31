@@ -239,6 +239,10 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: false,
         },
+        ProformaCompanyName: {
+            type: String,
+            required: true,
+        },
       
         ProformaCustomerName: {
             type: String,
@@ -305,10 +309,11 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        ProformaAddress:{
+       
+        detailsCardAddress:{
             type:String,
             required: true,
-        },
+        }
        
     },
     serviceList: [serviceSchema],
@@ -752,6 +757,83 @@ const chargesCountSchema = new mongoose.Schema({
         default: 800,
     },
 });
+const companyCreationSchema = new mongoose.Schema({
+
+    companyUniqueId:{
+        type: Number,
+        required: true,
+        unique:true
+    } ,
+    companyName:{
+        type:String,
+        required:true
+    },
+    companyAddress:{
+        type:String,
+        required:true
+    },
+    companyCity:{
+        type:String,
+        required:true
+    },
+    companyState:{
+        type:String,
+        required:true
+    },
+    companyPincode:{
+        type:String,
+        required:true
+    },
+    companyGstNo:{
+        type:String,
+        required:true
+    },
+    companyPanNo:{
+        type:String,
+        required:true
+    },
+    companyEmail:{
+        type:String,
+        required:true
+    },
+    companyFinanceContact:{
+        type:String,
+        required:true
+    },
+    companyAlernativecontact:{
+        type:Number,
+        required:false
+    },
+    companyBankName:{
+        type:String,
+        required:true
+    },
+    companyBankAccount_No:{
+        type:String,
+        required:true
+    },
+    companyIFSCcode:{
+        type:String,
+        required:true
+    },
+    companyBranchName:{
+        type:String,
+        required:true
+    }
+
+})
+const companyCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
+ 
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
 
 const Counter = mongoose.model('Counter', counterSchema);
 const User = mongoose.model('User', userSchema);
@@ -769,7 +851,11 @@ const customerCreation =mongoose.model('customerCreation',customerCreationSchema
 const customerCount= mongoose.model('customerCount',customerCountSchema)
 const chargesCreation= mongoose.model('chargesCreation',chargesCreationSchema)
 const chargesCount= mongoose.model('chargeCount',chargesCountSchema)
+const companyCreate =mongoose.model('companyCreation',companyCreationSchema);
+const companyCount= mongoose.model('companyCount',companyCountSchema)
+
+
 
 
 // Export as an object
-module.exports = { User, Approval ,Counter,invoice,countries,statee,layout,invoiceproformaCount,invoicetaxCount,uniqueId,userCreation,userCount,customerCreation,customerCount,chargesCreation,chargesCount};
+module.exports = { User, Approval ,Counter,invoice,countries,statee,layout,invoiceproformaCount,invoicetaxCount,uniqueId,userCreation,userCount,customerCreation,customerCount,chargesCreation,chargesCount,companyCreate,companyCount};
