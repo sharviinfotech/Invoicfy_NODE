@@ -92,7 +92,7 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure: false, // Use TLS
     auth: {
-        user: "noreply.itapps@hbl.in",
+        user: "sunilkumar@sharviinfotech.com",
         pass: "Happy#1968",
     },
 });

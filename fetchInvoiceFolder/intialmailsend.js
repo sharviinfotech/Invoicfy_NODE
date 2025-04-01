@@ -31,7 +31,7 @@ const send = async  (s) =>{
         console.log("Invoice data received:", invoiceData);
 
         // Send email
-        const email = "sunilkumar@sharviinfotech.com";
+        const email = "kusuma@sharviinfotech.com";
         await sendInvoiceDataToEmail(email, JSON.stringify(invoiceData, null, 2));
 
     } catch (error) {

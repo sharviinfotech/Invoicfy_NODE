@@ -592,7 +592,7 @@ module.exports = (() => {
                     ProformaInvoiceDate: header.ProformaInvoiceDate,
                     ProformaPan: header.ProformaPan,
                     ProformaGstNumber: header.ProformaGstNumber,
-                    ProformaTypeOfServices: header.ProformaTypeOfAircraft,
+                    ProformaTypeOfServices: header.ProformaTypeOfServices,
                     ProformaBankName: header. ProformaBankName,
                     notes: header.notes,
                     ProformaBankAccountNumber: ProformaBankAccountNumber,
