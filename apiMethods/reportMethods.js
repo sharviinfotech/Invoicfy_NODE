@@ -159,7 +159,7 @@ module.exports = (() => {
                 const { header, serviceList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
-                    pqStatus, pqUniqueId,ProformaBankAccountNumber,ProformaIFSCcode,ProformaTypeOfServices,detailsCardAddress
+                    pqStatus, pqUniqueId,ProformaBankAccountNumber,ProformaIFSCcode,ProformaTypeOfServices,detailsCardAddress,ProformaCompanyName
                 } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -176,7 +176,7 @@ module.exports = (() => {
                         { name: "invoiceUniqueNumber" },  // Find condition
                         {
                             $inc: { value: 1 },
-                            $setOnInsert: { startWith: "RGPAPL/PQ-" }  // Ensures it's set only if a new document is inserted
+                            $setOnInsert: { startWith: "SHARVI/PQ-" }  // Ensures it's set only if a new document is inserted
                         },
                         { new: true, upsert: true, setDefaultsOnInsert: true }  // Ensure default values are applied
                     );
@@ -227,7 +227,7 @@ module.exports = (() => {
                     //     { name: "invoiceUniqueNumber" },  // Find condition
                     //     {
                     //         $inc: { value: 1 },
-                    //         $setOnInsert: { startWith: "RGPAPL/TAX-" }  // Ensures it's set only if a new document is inserted
+                    //         $setOnInsert: { startWith: "SHARVI/TAX-" }  // Ensures it's set only if a new document is inserted
                     //     },
                     //     { new: true, upsert: true, setDefaultsOnInsert: true }  // Ensure default values are applied
                     // );
@@ -254,7 +254,7 @@ module.exports = (() => {
                     console.log("pqSameforTAX", pqSameforTAX)
                     // invoiceReferenceNo = counter.value;
                     invoiceReferenceNo = pqSameforTAX;
-                    start = "RGPAPL/TAX-";
+                    start = "SHARVI/TAX-";
                     console.log("invoiceReferenceNo", invoiceReferenceNo)
                     const parts = header.ProformaInvoiceDate.split('-'); // Split the date into parts
                     console.log("parts", parts)
@@ -337,7 +337,8 @@ module.exports = (() => {
                     ProformaBankAccountNumber,
                     ProformaIFSCcode,
                     ProformaTypeOfServices,
-                    detailsCardAddress
+                    detailsCardAddress,
+                    ProformaCompanyName
                 };
 
               
@@ -1441,7 +1442,7 @@ module.exports = (() => {
 
             try {
                 console.log("req.body", req.body)
-                const { servicesName,customerName,companyName ,PoNumber} = req.body;
+                const { servicesName,customerName,companyName ,poNumber} = req.body;
                 
 
                 const counter = await chargesCount.findOneAndUpdate(
@@ -1455,7 +1456,7 @@ module.exports = (() => {
                     servicesName,
                     customerName,
                     companyName,
-                    PoNumber,
+                    poNumber,
                     chargesUniqueId
 
                 })

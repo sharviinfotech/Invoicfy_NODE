@@ -739,7 +739,7 @@ const chargesCreationSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    PoNumber:{
+    poNumber:{
         type:String,
         required:true
     },
