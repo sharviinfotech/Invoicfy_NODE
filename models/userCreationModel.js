@@ -152,7 +152,7 @@ const invoiceProformaInvoiceSchema = new mongoose.Schema({
  
     value: {
         type: Number,
-        default: 800,
+        default: 100,
     },
     startWith: {
         type: String,
