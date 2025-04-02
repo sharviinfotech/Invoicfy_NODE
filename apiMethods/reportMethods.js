@@ -159,7 +159,7 @@ module.exports = (() => {
                 const { header, serviceList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
-                    pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaTypeOfServices, detailsCardAddress, ProformaCompanyName
+                    pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch,ProformaTypeOfServices, detailsCardAddress, ProformaCompanyName
                 } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -354,6 +354,7 @@ module.exports = (() => {
                     notes: header.notes,
                     ProformaBankAccountNumber: header.ProformaBankAccountNumber,
                     ProformaIFSCcode: header.ProformaIFSCcode,
+                    ProformaBranch:header.ProformaBranch,
                     detailsCardAddress: header.detailsCardAddress,
 
 
@@ -395,6 +396,7 @@ module.exports = (() => {
                     pqUniqueId,
                     ProformaBankAccountNumber,
                     ProformaIFSCcode,
+                    ProformaBranch,
                     ProformaTypeOfServices,
                     detailsCardAddress,
                     ProformaCompanyName
