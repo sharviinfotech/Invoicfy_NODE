@@ -1,9 +1,6 @@
 
 const{sendInvoiceDataToEmail} =require('./sendInvoiceToMail')
-
-
-
-
+import { BASE_API_URL } from './baseFile.js';
 const send = async  (s) =>{
     try {
         console.log("postInvoiceListInMail");
@@ -13,7 +10,7 @@ const send = async  (s) =>{
         };
 
         // Call the API
-        const response = await fetch("http://localhost:3000/api/invoice/getAllInvoices", {
+        const response = await fetch(`${BASE_API_URL}/api/invoice/getAllInvoices`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
