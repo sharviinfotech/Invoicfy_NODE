@@ -13,7 +13,7 @@ const send = async  (s) =>{
         };
 
         // Call the API
-        const response = await fetch(`${BASE_SERVER_URL}/${BASE_PORT}/api/invoice/getAllInvoices`, {
+        const response = await fetch(`${BASE_SERVER_URL}:${BASE_PORT}/api/invoice/getAllInvoices`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

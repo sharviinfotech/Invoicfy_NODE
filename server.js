@@ -22,7 +22,7 @@ app.use('/api', routes);
 connectDB();
 
 // Server Initialization
-app.listen(BASE_PORT, () => console.log(`Server running on port ${BASE_PORT}`));
+app.listen(BASE_PORT, () => console.log(`Server running on port ${BASE_SERVER_URL}:${BASE_PORT}`));
 recevieInvoiceSendToMail.send()
 
 // async function postInvoiceListInMail() {
