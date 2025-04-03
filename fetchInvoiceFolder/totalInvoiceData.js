@@ -1,13 +1,12 @@
 const axios = require("axios");
-import { BASE_API_URL } from './baseFile.js';
-
+const { BASE_URL } = require('../baseFile');
 
 async function fetchInvoiceList() {
     try {
         const data = {
             
         }
-        const response = await axios.post(`${BASE_API_URL}/api/invoice/getAllInvoices`, data);
+        const response = await axios.post(`${BASE_URL}/api/invoice/getAllInvoices`, data);
         // console.log("response",response)
         // console.log("Invoice Data: 123", JSON.stringify(response.data.data, null, 2));
         const postResponse = response.data.data
