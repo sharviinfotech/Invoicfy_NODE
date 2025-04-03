@@ -309,6 +309,10 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        ProformaBranch:{
+            type: String,
+            required: true,
+        },
        
         detailsCardAddress:{
             type:String,
@@ -540,6 +544,10 @@ const invoiceLayoutSchema = new mongoose.Schema({
             required: true,
         },
         ProformaIFSCcode:{
+            type: String,
+            required: true,
+        },
+        ProformaBranch:{
             type: String,
             required: true,
         },
