@@ -183,6 +183,14 @@ const serviceSchema=new mongoose.Schema({
         type: String,
         required: false,
     },
+    units: {
+        type: Number,
+        required: false,
+    },
+    rate: {
+        type: String,
+        required: false,
+    },
     amount: {
         type: String,
         required: false,
