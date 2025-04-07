@@ -299,7 +299,7 @@ const invoiceSchema = new mongoose.Schema({
         },
         ProformaTypeOfServices: {
             type: String,
-            required: true,
+            required: false,
         },
         notes:{
             type: String,
