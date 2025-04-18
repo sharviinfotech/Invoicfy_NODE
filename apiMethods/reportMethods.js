@@ -160,7 +160,7 @@ module.exports = (() => {
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch,ProformaTypeOfServices, detailsCardAddress, ProformaCompanyName
-                } = req.body
+                    ,fundsRecievedDate,refUTR,actualAmountReceived } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
                 var invoiceUniqueNumber;
@@ -399,7 +399,10 @@ module.exports = (() => {
                     ProformaBranch,
                     ProformaTypeOfServices,
                     detailsCardAddress,
-                    ProformaCompanyName
+                    ProformaCompanyName,
+                    fundsRecievedDate,
+                    refUTR,
+                    actualAmountReceived
                 };
 
 
@@ -1854,6 +1857,69 @@ module.exports = (() => {
             }
 
         },
+
+        updateKeysFromFundsScreen:async (req,res)=>{
+        try {
+            const {originalUniqueId,fundsRecievedDate,refUTR,actualAmountReceived} = req.body;
+
+            if(!fundsRecievedDate){
+                return res.status(200).json({
+                    message: "Funds Recieved Date is Required",
+                    status: 200,
+                    isValid:false
+                  });
+            }
+            if(!refUTR){
+                return res.status(200).json({
+                    message: "ref UTR is Required",
+                    status: 200,
+                    isValid:false
+                  });
+            }
+            if(!actualAmountReceived){
+                return res.status(200).json({
+                    message: "Actual Received Amount is Required",
+                    status: 200,
+                    isValid:false
+                  });
+            }
+
+            const updatedInvoice = await invoice.findOneAndUpdate(
+                { originalUniqueId: originalUniqueId },
+                {
+                  $set: {
+                    fundsRecievedDate: fundsRecievedDate,
+                    refUTR: refUTR,
+                    actualAmountReceived: actualAmountReceived
+                  }
+                },
+                { new: true, runValidators: true }
+              );
+              if (!updatedInvoice) {
+                return res.status(404).json({
+                  message: "Invoice not found for the given originalUniqueId",
+                  status: 404,
+                  isValid:false
+                });
+              }
+
+              res.status(200).json({
+                message:"Updated Successfully",
+                status:200,
+                data:updatedInvoice,
+                isValid:true
+              })
+
+        }catch (error) {
+            console.error("Error updating", error);
+            res.status(500).json({
+                message: "Failed to Update",
+                status: 500,
+                error: error.message
+            });
+        }
+
+        }
 
 
 

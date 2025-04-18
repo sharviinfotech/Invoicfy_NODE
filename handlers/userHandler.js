@@ -36,6 +36,7 @@ module.exports = (() => {
         companyCreation:(req,res)=>userMethods.newCompanyCreation(req,res),
         companyUpdate:(req,res)=>userMethods.updateCompany(req,res),
         getAllCompany:(req,res)=>userMethods.listOfCompany(req,res),
+        updateFundsScreen:(req,res)=>userMethods.updateKeysFromFundsScreen(req,res)
 
     };
 })();

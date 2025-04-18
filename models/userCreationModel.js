@@ -413,8 +413,19 @@ const invoiceSchema = new mongoose.Schema({
             return this.proformaCardHeaderId === "TAX";
         },
         default: 0 // Ensure it's never undefined or null
+    },
+    fundsRecievedDate:{
+        type:String,
+        required:false
+    },
+    refUTR:{
+        type:String,
+        required:false
+    },
+    actualAmountReceived:{
+        type:String,
+        required:false
     }
-    
 
             
             

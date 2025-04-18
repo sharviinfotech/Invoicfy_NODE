@@ -42,6 +42,8 @@ module.exports = (() => {
     router.post('/invoice/updateExitCompany',userHandler.companyUpdate);
     router.get('/invoice/getAllCompanyList',userHandler.getAllCompany);
 
+    router.post('/invoice/updateFromFundsScreen',userHandler.updateFundsScreen);
+
 
 
     console.log('enter route')
