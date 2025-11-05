@@ -183,6 +183,12 @@ const serviceSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+
+    HSN_SAC: {
+        type: String,
+        required: false,
+    },
+
     units: {
         type: Number,
         required: false,
@@ -276,8 +282,11 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-
         ProformaPanNO: {
+            type: String,
+            required: true,
+        },
+        ProformaPoNumber: {
             type: String,
             required: true,
         },
@@ -525,8 +534,11 @@ const invoiceLayoutSchema = new mongoose.Schema({
             type: String,
             required: false,
         },
-
         ProformaPanNO: {
+            type: String,
+            required: false,
+        },
+        ProformaPoNumber: {
             type: String,
             required: false,
         },
