@@ -160,7 +160,7 @@ module.exports = (() => {
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress, ProformaCompanyName
-                    , fundsRecievedDate, refUTR, actualAmountReceived } = req.body
+                    , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
                 var invoiceUniqueNumber;
@@ -403,7 +403,9 @@ module.exports = (() => {
                     ProformaCompanyName,
                     fundsRecievedDate,
                     refUTR,
-                    actualAmountReceived
+                    actualAmountReceived,
+                    DSC_Status,
+                    DSC_UploadFile
                 };
 
 
@@ -1275,10 +1277,37 @@ module.exports = (() => {
                 res.status(500).json({ message: "Description saved Failed", status: 500, error: error.message });
             }
         },
+        uploadDSCFile: async (req, res) => {
+            try {
+                console.log("uploadDSCFile", req.body)
+                const { originalUniqueId, DSC_Status, DSC_UploadFile } = req.body;
 
+                if (!originalUniqueId || !DSC_UploadFile) {
+                    return res.status(400).json({ message: "Missing data", status: 400 });
+                }
 
+                const updatedInvoice = await invoice.findOneAndUpdate(
+                    { originalUniqueId },
+                    { $set: { DSC_Status, DSC_UploadFile } },
+                    { new: true }
+                );
 
+                if (!updatedInvoice)
+                    return res.status(404).json({ message: "Invoice Not Found", status: 404 });
 
+                res.status(200).json({
+                    message: "DSC file uploaded successfully",
+                    data: updatedInvoice,
+                    status: 200,
+                });
+            } catch (error) {
+                res.status(500).json({
+                    message: "Error uploading DSC File",
+                    status: 500,
+                    error: error.message,
+                });
+            }
+        },
         fetchInvoiceBasedOnDates: async (req, res) => {
             try {
                 console.log('req.body', req.body);

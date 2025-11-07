@@ -43,7 +43,7 @@ module.exports = (() => {
     router.get('/invoice/getAllCompanyList',userHandler.getAllCompany);
 
     router.post('/invoice/updateFromFundsScreen',userHandler.updateFundsScreen);
-
+router.post('/invoice/DSC_FileUpload',userHandler.dscfileupload);
 
 
     console.log('enter route')

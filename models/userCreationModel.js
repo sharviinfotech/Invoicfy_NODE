@@ -434,8 +434,15 @@ const invoiceSchema = new mongoose.Schema({
     actualAmountReceived: {
         type: String,
         required: false
+    },
+  DSC_Status: {
+        type: String,
+        required: false
+    },
+      DSC_UploadFile: {
+        type: String,
+        required: false
     }
-
 
 
 
