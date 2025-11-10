@@ -1537,7 +1537,7 @@ module.exports = (() => {
 
             try {
                 console.log("req.body", req.body)
-                const { servicesName, customerName, companyName, poNumber, HSN_SAC, UOM } = req.body;
+                const { servicesName, customerName, companyName, poNumber, HSN_SAC, UOM, } = req.body;
 
 
                 const counter = await chargesCount.findOneAndUpdate(
