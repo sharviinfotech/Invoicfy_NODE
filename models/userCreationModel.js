@@ -194,7 +194,7 @@ const serviceSchema = new mongoose.Schema({
         required: false,
     },
     UOM: {
-        type: Number,
+        type: String,
         required: false,
     },
     rate: {
