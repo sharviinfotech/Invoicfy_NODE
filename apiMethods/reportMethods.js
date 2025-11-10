@@ -159,7 +159,8 @@ module.exports = (() => {
                 const { header, serviceList, taxList, subtotal, grandTotal, amountInWords, reason, invoiceApprovedOrRejectedByUser,
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
-                    pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress, ProformaCompanyName
+                    pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress,
+                    companyState, ProformaCompanyName
                     , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -357,6 +358,7 @@ module.exports = (() => {
                     ProformaIFSCcode: header.ProformaIFSCcode,
                     ProformaBranch: header.ProformaBranch,
                     detailsCardAddress: header.detailsCardAddress,
+                    companyState:header.companyState
 
 
                 }
@@ -400,6 +402,7 @@ module.exports = (() => {
                     ProformaBranch,
                     ProformaTypeOfServices,
                     detailsCardAddress,
+                    companyState,
                     ProformaCompanyName,
                     fundsRecievedDate,
                     refUTR,
@@ -412,7 +415,7 @@ module.exports = (() => {
 
                 // Create and save the invoice
                 const newInvoice = new invoice(invoiceData);
-                console.log("newInvoice", newInvoice);
+                console.log("newInvoice Creation", newInvoice);
 
                 const savedInvoice = await newInvoice.save();
 

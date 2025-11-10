@@ -338,6 +338,10 @@ const invoiceSchema = new mongoose.Schema({
         detailsCardAddress: {
             type: String,
             required: true,
+        },
+        companyState:{
+            type: String,
+            required: true,
         }
 
     },
