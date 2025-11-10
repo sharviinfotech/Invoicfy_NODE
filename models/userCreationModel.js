@@ -189,7 +189,11 @@ const serviceSchema = new mongoose.Schema({
         required: false,
     },
 
-    units: {
+    quantity: {
+        type: Number,
+        required: false,
+    },
+    UOM: {
         type: Number,
         required: false,
     },
@@ -435,11 +439,11 @@ const invoiceSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-  DSC_Status: {
+    DSC_Status: {
         type: String,
         required: false
     },
-      DSC_UploadFile: {
+    DSC_UploadFile: {
         type: String,
         required: false
     }
@@ -787,6 +791,10 @@ const chargesCreationSchema = new mongoose.Schema({
         required: true
     },
     HSN_SAC: {
+        type: String,
+        required: true
+    },
+    UOM: {
         type: String,
         required: true
     },
