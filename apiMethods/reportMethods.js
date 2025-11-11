@@ -7,6 +7,9 @@ const moment = require('moment');
 const nodemailer = require('nodemailer');
 // const { sendInvoiceDataToEmail } = require('../fetchInvoiceFolder/sendInvoiceToMail'); // Import email function
 const recevieInvoiceSendToMail = require('../fetchInvoiceFolder/intialmailsend')
+const{sendTaxInvoiceList} =require('../fetchInvoiceFolder/sendTaxMails')
+const{sendInvoiceDataToEmail} =require('../fetchInvoiceFolder/sendInvoiceToMail')
+
 
 module.exports = (() => {
     return {
@@ -333,7 +336,7 @@ module.exports = (() => {
                 );
 
                 originalUniqueId = originalId.value; // Store the number
-                console.log("invoiceUniqueNumber end", invoiceUniqueNumber)
+                // console.log("invoiceUniqueNumber end", invoiceUniqueNumber)
 
                 const headerObj = {
                     invoiceHeader: header.invoiceHeader,
@@ -358,7 +361,7 @@ module.exports = (() => {
                     ProformaIFSCcode: header.ProformaIFSCcode,
                     ProformaBranch: header.ProformaBranch,
                     detailsCardAddress: header.detailsCardAddress,
-                    companyState:header.companyState
+                    companyState: header.companyState
 
 
                 }
@@ -415,9 +418,19 @@ module.exports = (() => {
 
                 // Create and save the invoice
                 const newInvoice = new invoice(invoiceData);
-                console.log("newInvoice Creation", newInvoice);
+                // console.log("newInvoice Creation", newInvoice);
 
                 const savedInvoice = await newInvoice.save();
+                if (savedInvoice.proformaCardHeaderId === "OnlyTAX") {
+                    console.log("OnlyTAX")
+                    const email = "sunilkumar@sharviinfotech.com";
+                    await sendTaxInvoiceList(email, JSON.stringify(invoiceData, null, 2));
+                }
+                  if (savedInvoice.proformaCardHeaderId === "PQ") {
+                    console.log("OnlyTAX")
+                    const email = "sunilkumar@sharviinfotech.com";
+                    await sendInvoiceDataToEmail(email, JSON.stringify(invoiceData, null, 2));
+                }
 
 
                 recevieInvoiceSendToMail.send()
@@ -604,7 +617,7 @@ module.exports = (() => {
 
                 // }
 
-                console.log('invoices', invoices)
+                // console.log('invoices', invoices)
                 if (!invoices || invoices.length === 0) {
                     return res.status(200).json({
                         message: "No Data Available",
@@ -1283,7 +1296,7 @@ module.exports = (() => {
         uploadDSCFile: async (req, res) => {
             try {
                 console.log("uploadDSCFile", req.body)
-                const { originalUniqueId, DSC_Status, DSC_UploadFile } = req.body;
+                const { originalUniqueId, DSC_Status, DSC_UploadFile, status } = req.body;
 
                 if (!originalUniqueId || !DSC_UploadFile) {
                     return res.status(400).json({ message: "Missing data", status: 400 });
@@ -1291,7 +1304,7 @@ module.exports = (() => {
 
                 const updatedInvoice = await invoice.findOneAndUpdate(
                     { originalUniqueId },
-                    { $set: { DSC_Status, DSC_UploadFile } },
+                    { $set: { DSC_Status, DSC_UploadFile, status } },
                     { new: true }
                 );
 
@@ -1603,9 +1616,9 @@ module.exports = (() => {
         },
         listOfCharges: async (req, res) => {
             try {
-                console.log("chargesCreation", chargesCreation)
+                // console.log("chargesCreation", chargesCreation)
                 const chargesData = await chargesCreation.find()
-                console.log("chargesData", chargesData)
+                // console.log("chargesData", chargesData)
                 if (!chargesData || chargesData.length === 0) {
                     return res.status(200).json({
                         message: "No Data Available",

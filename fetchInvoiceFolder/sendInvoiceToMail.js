@@ -88,19 +88,22 @@ const { BASE_SERVER_URL, BASE_PORT } = require('../baseFile');
 
 // module.exports = { sendInvoiceDataToEmail };
 const transporter = nodemailer.createTransport({
-    host: "smtp.logix.in",
-    port: 587,
-    secure: false, // Use TLS
-    auth: {
-        user: "sunilkumar@sharviinfotech.com",
-        pass: "Happy#1968",
-    },
+    host: "smtp.office365.com",
+  port: 587,
+  secure: false, // TLS
+  auth: {
+    user: "sunilkumar@infotech.com",
+    pass: "JKAL@2025",
+  },
+  tls: {
+    ciphers: "SSLv3",
+  },
 });
 
 
 const sendInvoiceDataToEmail = async (toEmail, postTotalInvoiceList) => {
     // console.log("toEmail", toEmail, "postTotalInvoiceList", typeof (postTotalInvoiceList));
-    console.log("toEmail", toEmail,);
+    console.log("toEmail 106", toEmail,);
 
     let arrayData = [];
 
@@ -144,10 +147,10 @@ const sendInvoiceDataToEmail = async (toEmail, postTotalInvoiceList) => {
                     <td>${data.invoiceUniqueNumber || 'N/A'}</td>
                     <td>${header.ProformaInvoiceDate || 'N/A'}</td>
                     <td>${header.ProformaCustomerName || 'N/A'}</td>
-                    <td>${header.ProformaTypeOfAircraft || 'N/A'}</td>
+                    
                     <td>${header.ProformaCity || 'N/A'}</td>
-                    <td>${header.BookingSector || 'N/A'}</td>
-                    <td>${header.startBookingDateOfJourny || 'N/A'}/${header.endBookingDateOfJourny || 'N/A'}</td>
+                   
+                   
                     <td>${data.grandTotal || 'N/A'}</td>
                     <td>
     <div style="display: flex; justify-content: center; gap: 10px;">
@@ -193,7 +196,7 @@ const sendInvoiceDataToEmail = async (toEmail, postTotalInvoiceList) => {
 
 
     const mailOptions = {
-        from: 'noreply.itapps@hbl.in',
+        from: 'retailer@jkagri.com',
         to: toEmail,  // Use the toEmail parameter instead of obj.userEmail
         subject: 'Invoice Pending Approval',
         html: `
@@ -205,12 +208,11 @@ const sendInvoiceDataToEmail = async (toEmail, postTotalInvoiceList) => {
                     <th class="text-nowrap">Invoice Number</th>
                     <th class="text-nowrap">Invoice Date</th>
                     <th class="text-nowrap">Customer Name</th>
-                    <th class="text-nowrap">Type Of Aircraft</th>
+                   
                     <th class="text-nowrap">City</th>
-                    <th class="text-nowrap">Destination</th>
-                    <th class="text-nowrap">Date Of Journey</th>
+                  
                     <th class="text-nowrap">Total Amount</th>
-                    <th class="text-nowrap">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -292,8 +294,8 @@ const rejectInvoice = async (originalUniqueId) => {
 
 const sendEmails = async (recipient, subject, message) => {
     const mailOptions = {
-        from: 'noreply.itapps@hbl.in',
-        to: 'sriramunaidug@sharviinfotech.com',
+        from: 'retailer@jkagri.com',
+        to: 'sunilkumar@sharviinfotech.com',
         subject: '',
         text: message,
     };
