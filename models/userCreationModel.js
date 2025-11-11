@@ -339,7 +339,11 @@ const invoiceSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        companyState:{
+        companyState: {
+            type: String,
+            required: true,
+        },
+        companyBankAccountType: {
             type: String,
             required: true,
         }
@@ -601,6 +605,11 @@ const invoiceLayoutSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        companyBankAccountType: {
+            type: String,
+            required: true
+        },
+
     },
     serviceList: [serviceSchema],
     taxList: [taxSchema],
@@ -876,6 +885,10 @@ const companyCreationSchema = new mongoose.Schema({
         required: true
     },
     companyBranchName: {
+        type: String,
+        required: true
+    },
+    companyBankAccountType: {
         type: String,
         required: true
     }

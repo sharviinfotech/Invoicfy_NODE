@@ -7,8 +7,8 @@ const moment = require('moment');
 const nodemailer = require('nodemailer');
 // const { sendInvoiceDataToEmail } = require('../fetchInvoiceFolder/sendInvoiceToMail'); // Import email function
 const recevieInvoiceSendToMail = require('../fetchInvoiceFolder/intialmailsend')
-const{sendTaxInvoiceList} =require('../fetchInvoiceFolder/sendTaxMails')
-const{sendInvoiceDataToEmail} =require('../fetchInvoiceFolder/sendInvoiceToMail')
+const { sendTaxInvoiceList } = require('../fetchInvoiceFolder/sendTaxMails')
+const { sendInvoiceDataToEmail } = require('../fetchInvoiceFolder/sendInvoiceToMail')
 
 
 module.exports = (() => {
@@ -361,7 +361,9 @@ module.exports = (() => {
                     ProformaIFSCcode: header.ProformaIFSCcode,
                     ProformaBranch: header.ProformaBranch,
                     detailsCardAddress: header.detailsCardAddress,
-                    companyState: header.companyState
+                    companyState: header.companyState,
+                    companyBankAccountType: header.companyBankAccountType,
+
 
 
                 }
@@ -407,11 +409,13 @@ module.exports = (() => {
                     detailsCardAddress,
                     companyState,
                     ProformaCompanyName,
+                    // companyBankAccountType,
                     fundsRecievedDate,
                     refUTR,
                     actualAmountReceived,
                     DSC_Status,
-                    DSC_UploadFile
+                    DSC_UploadFile,
+
                 };
 
 
@@ -426,7 +430,7 @@ module.exports = (() => {
                     const email = "sunilkumar@sharviinfotech.com";
                     await sendTaxInvoiceList(email, JSON.stringify(invoiceData, null, 2));
                 }
-                  if (savedInvoice.proformaCardHeaderId === "PQ") {
+                if (savedInvoice.proformaCardHeaderId === "PQ") {
                     console.log("OnlyTAX")
                     const email = "sunilkumar@sharviinfotech.com";
                     await sendInvoiceDataToEmail(email, JSON.stringify(invoiceData, null, 2));
@@ -682,6 +686,7 @@ module.exports = (() => {
                     ProformaBankAccountNumber: ProformaBankAccountNumber,
                     ProformaIFSCode: ProformaIFSCode,
                     ProformaAddress: header.ProformaAddress,
+                    companyBankAccountType: header.companyBankAccountType
                 };
 
 
@@ -1786,7 +1791,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyName, companyAddress, companyCity, companyState, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName } = req.body;
+                const { companyName, companyAddress, companyCity, companyState, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType } = req.body;
 
                 const counter = await companyCount.findOneAndUpdate(
                     { name: "companyUniqueId" },
@@ -1810,6 +1815,7 @@ module.exports = (() => {
                     companyBankAccount_No,
                     companyIFSCcode,
                     companyBranchName,
+                    companyBankAccountType,
                     companyUniqueId
 
                 })
