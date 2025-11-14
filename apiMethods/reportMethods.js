@@ -163,7 +163,7 @@ module.exports = (() => {
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress,
-                    companyState, ProformaCompanyName
+                    companyState, state_Code, customerplaceOfSupply, ProformaCompanyName
                     , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -362,6 +362,8 @@ module.exports = (() => {
                     ProformaBranch: header.ProformaBranch,
                     detailsCardAddress: header.detailsCardAddress,
                     companyState: header.companyState,
+
+                    customerplaceOfSupply: header.customerplaceOfSupply,
                     companyBankAccountType: header.companyBankAccountType,
 
 
@@ -408,6 +410,8 @@ module.exports = (() => {
                     ProformaTypeOfServices,
                     detailsCardAddress,
                     companyState,
+                    customerplaceOfSupply,
+                    state_Code,
                     ProformaCompanyName,
                     // companyBankAccountType,
                     fundsRecievedDate,
@@ -1368,7 +1372,7 @@ module.exports = (() => {
         newCustomerCreation: async (req, res) => {
             console.log("newCustomerCreation ", req, res)
             try {
-                const { customerName, customerAddress, customerCity, customerState, customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod } = req.body;
+                const { customerName, customerAddress, customerCity, customerState, state_Code, placeOfSupply, customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod } = req.body;
 
                 const counter = await customerCount.findOneAndUpdate(
                     { name: "customerUniqueId" },
@@ -1382,6 +1386,8 @@ module.exports = (() => {
                     customerAddress,
                     customerCity,
                     customerState,
+                    state_Code,
+                    placeOfSupply,
                     customerPincode,
                     customerGstNo,
                     customerPanNo,
@@ -1791,7 +1797,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyName, companyAddress, companyCity, companyState, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType } = req.body;
+                const { companyName, companyAddress, companyCity, companyState, state_Code, placeOfSupply, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType } = req.body;
 
                 const counter = await companyCount.findOneAndUpdate(
                     { name: "companyUniqueId" },
@@ -1805,6 +1811,8 @@ module.exports = (() => {
                     companyAddress,
                     companyCity,
                     companyState,
+                    state_Code,
+                    placeOfSupply,
                     companyPincode,
                     companyGstNo,
                     companyPanNo,

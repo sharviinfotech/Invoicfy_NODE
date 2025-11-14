@@ -292,7 +292,7 @@ const invoiceSchema = new mongoose.Schema({
         },
         ProformaPoNumber: {
             type: String,
-            required: true,
+            required: false,
         },
         ProformaInvoiceNumber: {
             type: String,
@@ -340,6 +340,10 @@ const invoiceSchema = new mongoose.Schema({
             required: true,
         },
         companyState: {
+            type: String,
+            required: true,
+        },
+        customerplaceOfSupply: {
             type: String,
             required: true,
         },
@@ -738,6 +742,10 @@ const customerCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    placeOfSupply: {
+        type: String,
+        required: true
+    },
     customerPincode: {
         type: String,
         required: true
@@ -801,7 +809,7 @@ const chargesCreationSchema = new mongoose.Schema({
     },
     poNumber: {
         type: String,
-        required: true
+        required: false
     },
     HSN_SAC: {
         type: String,
@@ -845,6 +853,14 @@ const companyCreationSchema = new mongoose.Schema({
         required: true
     },
     companyState: {
+        type: String,
+        required: true
+    },
+    state_Code: {
+        type: String,
+        required: true
+    },
+    placeOfSupply: {
         type: String,
         required: true
     },
