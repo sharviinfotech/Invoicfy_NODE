@@ -164,7 +164,7 @@ module.exports = (() => {
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress,
                     companyState, state_Code, customerplaceOfSupply, ProformaCompanyName
-                    , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile } = req.body
+                    , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile ,uploadType} = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
                 var invoiceUniqueNumber;
@@ -368,6 +368,7 @@ module.exports = (() => {
 
 
 
+
                 }
                 // const bankObj={
                 //     accountName:bankDetails.accountName,
@@ -419,6 +420,7 @@ module.exports = (() => {
                     actualAmountReceived,
                     DSC_Status,
                     DSC_UploadFile,
+                    uploadType
 
                 };
 
@@ -1305,7 +1307,7 @@ module.exports = (() => {
         uploadDSCFile: async (req, res) => {
             try {
                 console.log("uploadDSCFile", req.body)
-                const { originalUniqueId, DSC_Status, DSC_UploadFile, status } = req.body;
+                const { originalUniqueId, DSC_Status, DSC_UploadFile,uploadType, status } = req.body;
 
                 if (!originalUniqueId || !DSC_UploadFile) {
                     return res.status(400).json({ message: "Missing data", status: 400 });
@@ -1313,7 +1315,7 @@ module.exports = (() => {
 
                 const updatedInvoice = await invoice.findOneAndUpdate(
                     { originalUniqueId },
-                    { $set: { DSC_Status, DSC_UploadFile, status } },
+                    { $set: { DSC_Status, DSC_UploadFile,uploadType, status } },
                     { new: true }
                 );
 
@@ -1372,7 +1374,7 @@ module.exports = (() => {
         newCustomerCreation: async (req, res) => {
             console.log("newCustomerCreation ", req, res)
             try {
-                const { customerName, customerAddress, customerCity, customerState, state_Code, placeOfSupply, customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod } = req.body;
+                const { customerName, customerAddress, customerCity, customerState,customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod,placeOfSupply } = req.body;
 
                 const counter = await customerCount.findOneAndUpdate(
                     { name: "customerUniqueId" },
@@ -1386,7 +1388,6 @@ module.exports = (() => {
                     customerAddress,
                     customerCity,
                     customerState,
-                    state_Code,
                     placeOfSupply,
                     customerPincode,
                     customerGstNo,
@@ -1409,7 +1410,7 @@ module.exports = (() => {
                 })
 
             } catch (error) {
-                res.status(500), json({
+                res.status(500).json({
                     message: "Failed to Save Customer",
                     status: 500,
                 })
@@ -1797,7 +1798,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyName, companyAddress, companyCity, companyState, state_Code, placeOfSupply, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType } = req.body;
+                const { companyName, companyAddress, companyCity, companyState, state_Code, placeOfSupply, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType,companyImageUpload } = req.body;
 
                 const counter = await companyCount.findOneAndUpdate(
                     { name: "companyUniqueId" },
@@ -1811,8 +1812,6 @@ module.exports = (() => {
                     companyAddress,
                     companyCity,
                     companyState,
-                    state_Code,
-                    placeOfSupply,
                     companyPincode,
                     companyGstNo,
                     companyPanNo,
@@ -1824,6 +1823,7 @@ module.exports = (() => {
                     companyIFSCcode,
                     companyBranchName,
                     companyBankAccountType,
+                    companyImageUpload,
                     companyUniqueId
 
                 })

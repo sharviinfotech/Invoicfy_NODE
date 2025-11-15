@@ -458,6 +458,10 @@ const invoiceSchema = new mongoose.Schema({
     DSC_UploadFile: {
         type: String,
         required: false
+    },
+    uploadType:{
+        type: String,
+        required: false
     }
 
 
@@ -773,7 +777,11 @@ const customerCreationSchema = new mongoose.Schema({
     customerCreditPeriod: {
         type: String,
         required: true
-    }
+    },
+    placeOfSupply: {
+        type: String,
+        required: true
+    },
 
 })
 const customerCountSchema = new mongoose.Schema({
@@ -856,14 +864,7 @@ const companyCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    state_Code: {
-        type: String,
-        required: true
-    },
-    placeOfSupply: {
-        type: String,
-        required: true
-    },
+  
     companyPincode: {
         type: String,
         required: true
@@ -907,6 +908,10 @@ const companyCreationSchema = new mongoose.Schema({
     companyBankAccountType: {
         type: String,
         required: true
+    },
+    companyImageUpload:{
+        type: String,
+        required: false
     }
 
 })
