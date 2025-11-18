@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount,
-    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount } = require('../models/userCreationModel');
+    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount } = require('../models/userCreationModel');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const moment = require('moment');
@@ -164,7 +164,7 @@ module.exports = (() => {
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress,
                     companyState, state_Code, customerplaceOfSupply, ProformaCompanyName
-                    , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile ,uploadType} = req.body
+                    , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile, uploadType } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
                 var invoiceUniqueNumber;
@@ -1307,7 +1307,7 @@ module.exports = (() => {
         uploadDSCFile: async (req, res) => {
             try {
                 console.log("uploadDSCFile", req.body)
-                const { originalUniqueId, DSC_Status, DSC_UploadFile,uploadType, status } = req.body;
+                const { originalUniqueId, DSC_Status, DSC_UploadFile, uploadType, status } = req.body;
 
                 if (!originalUniqueId || !DSC_UploadFile) {
                     return res.status(400).json({ message: "Missing data", status: 400 });
@@ -1315,7 +1315,7 @@ module.exports = (() => {
 
                 const updatedInvoice = await invoice.findOneAndUpdate(
                     { originalUniqueId },
-                    { $set: { DSC_Status, DSC_UploadFile,uploadType, status } },
+                    { $set: { DSC_Status, DSC_UploadFile, uploadType, status } },
                     { new: true }
                 );
 
@@ -1374,7 +1374,7 @@ module.exports = (() => {
         newCustomerCreation: async (req, res) => {
             console.log("newCustomerCreation ", req, res)
             try {
-                const { customerName, customerAddress, customerCity, customerState,customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod,placeOfSupply } = req.body;
+                const { customerName, customerAddress, customerCity, customerState, customerPincode, customerGstNo, customerPanNo, customerEmail, customerContact, customerAlernativecontact, customerCreditPeriod, placeOfSupply } = req.body;
 
                 const counter = await customerCount.findOneAndUpdate(
                     { name: "customerUniqueId" },
@@ -1798,7 +1798,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyName, companyAddress, companyCity, companyState, state_Code, placeOfSupply, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType,companyImageUpload } = req.body;
+                const { companyName, companyAddress, companyCity, companyState, state_Code, placeOfSupply, companyPincode, companyGstNo, companyPanNo, companyEmail, companyFinanceContact, companyAlernativecontact, companyBankName, companyBankAccount_No, companyIFSCcode, companyBranchName, companyBankAccountType, companyImageUpload } = req.body;
 
                 const counter = await companyCount.findOneAndUpdate(
                     { name: "companyUniqueId" },
@@ -1982,11 +1982,254 @@ module.exports = (() => {
                 });
             }
 
-        }
+        },
+        productmasterCreation: async (req, res) => {
+            // console.log("newCompanyCreation ", req, res)
+            console.log("newCompanyCreation request received");
+            try {
 
+                const { companyNameORPlant, productCode, productName, materialType, purchasePrice, cogm, salesPrice, igstPer, sgstPer, cgstPer, selfLifeDays, batchReq, hsnCode, image, qmReq } = req.body;
 
+                const counter = await productCount.findOneAndUpdate(
+                    { name: "productMasterUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const productMasterUniqueId = counter.value;
+                console.log("productMasterUniqueId", productMasterUniqueId);
+                const companyPayload = new productCreation({
+                    companyNameORPlant,
+                    productCode,
+                    productName,
+                    materialType,
+                    purchasePrice,
+                    cogm,
+                    salesPrice,
+                    igstPer,
+                    sgstPer,
+                    cgstPer,
+                    selfLifeDays,
+                    batchReq,
+                    hsnCode,
+                    image,
+                    qmReq,
+                    productMasterUniqueId
 
+                })
 
+                const NewproductList = await companyPayload.save()
+
+                res.status(200).json({
+                    message: "New Company Created Successfully",
+                    status: 200,
+                    data: NewproductList,
+                    productMasterUniqueId
+                })
+
+            } catch (error) {
+                console.error("Error in newCompanyCreation:", error);
+                res.status(500).json({
+                    message: "Failed to Save Company",
+                    status: 500,
+                    error: error.message
+                })
+            }
+        },
+        updateProductmaster: async (req, res) => {
+            console.log("req.params:", req.params, "req.body:", req.body);
+
+            try {
+                const productMasterUniqueId = Number(req.body.productMasterUniqueId); // Convert to number
+                if (isNaN(productMasterUniqueId)) {
+                    return res.status(400).json({
+                        message: "Invalid Customer ID",
+                        status: 400
+                    });
+                }
+
+                const updateObj = req.body;
+                console.log("companyUniqueId:", productMasterUniqueId);
+                console.log("updateObj:", updateObj);
+
+                const updateUserObj = await productCreation.findOneAndUpdate(
+                    { productMasterUniqueId: productMasterUniqueId },
+                    { $set: updateObj },
+                    { new: true, runValidators: true }
+                );
+
+                console.log("updateUserObj:", updateUserObj);
+
+                if (!updateUserObj) {
+                    return res.status(404).json({
+                        message: "Company Not Found",
+                        status: 404
+                    });
+                }
+
+                res.status(200).json({
+                    message: "Product master Data Updated Successfully",
+                    status: 200,
+                    updatedList: updateUserObj
+                });
+
+            } catch (error) {
+                console.error("Error updating company:", error);
+                res.status(500).json({
+                    message: "Failed to Update Company",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+        listOfProduct: async (req, res) => {
+            try {
+                const productList = await productCreation.find()
+
+                if (!productList || productList.length === 0) {
+                    return res.status(200).json({
+                        message: "No Data Available",
+                        productList: [],
+                        status: 200
+                    })
+
+                }
+
+                res.status(200).json({
+                    message: "Data Fetched Successfully",
+                    data: productList,
+                    status: 200
+                })
+
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to Fetch Data"
+                })
+
+            }
+
+        },
+        InventorySave: async (req, res) => {
+            // console.log("newCompanyCreation ", req, res)
+            console.log("newCompanyCreation request received");
+            try {
+
+                const { sourceOfStock, companyNameORPlant, postingDate, productCode, productName, materialType, value, batch, sLock, availableStock, uom, createdAt, updatedAt } = req.body;
+
+                const counter = await inventoryCount.findOneAndUpdate(
+                    { name: "inventoryUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const inventoryUniqueId = counter.value;
+                console.log("inventoryUniqueId", inventoryUniqueId);
+                const companyPayload = new inventoryCreation({
+                    sourceOfStock,
+                    companyNameORPlant,
+                    postingDate,
+                    productCode,
+                    productName,
+                    materialType,
+                    value,
+                    batch,
+                    sLock,
+                    availableStock,
+                    uom,
+                    createdAt,
+                    updatedAt,
+                    inventoryUniqueId
+                })
+
+                const storedData= await companyPayload.save()
+
+                res.status(200).json({
+                    message: "Stock Entry Created Successfully",
+                    status: 200,
+                    data: storedData,
+                    inventoryUniqueId
+                })
+
+            } catch (error) {
+                console.error("Error in ::", error);
+                res.status(500).json({
+                    message: "Failed to Save",
+                    status: 500,
+                    error: error.message
+                })
+            }
+        },
+        InventoryUpdate: async (req, res) => {
+            console.log("req.params:", req.params, "req.body:", req.body);
+
+            try {
+                const inventoryUniqueId = Number(req.body.inventoryUniqueId); // Convert to number
+                if (isNaN(inventoryUniqueId)) {
+                    return res.status(400).json({
+                        message: "Invalid Customer ID",
+                        status: 400
+                    });
+                }
+
+                const updateObj = req.body;
+                console.log("companyUniqueId:", inventoryUniqueId);
+                console.log("updateObj:", updateObj);
+
+                const updateUserObj = await inventoryCreation.findOneAndUpdate(
+                    { inventoryUniqueId: inventoryUniqueId },
+                    { $set: updateObj },
+                    { new: true, runValidators: true }
+                );
+
+                console.log("updateUserObj:", updateUserObj);
+
+                if (!updateUserObj) {
+                    return res.status(404).json({
+                        message: "Stock Entry Not found based on given Id",
+                        status: 404
+                    });
+                }
+
+                res.status(200).json({
+                    message: "Data Updated Successfully",
+                    status: 200,
+                    updatedList: updateUserObj
+                });
+
+            } catch (error) {
+                console.error("Error updating company:", error);
+                res.status(500).json({
+                    message: "Failed to Update",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+         InventoryList: async (req, res) => {
+            try {
+                const InventoryList = await inventoryCreation.find()
+
+                if (!InventoryList || InventoryList.length === 0) {
+                    return res.status(200).json({
+                        message: "No Data Available",
+                        InventoryList: [],
+                        status: 200
+                    })
+
+                }
+
+                res.status(200).json({
+                    message: "Data Fetched Successfully",
+                    data: InventoryList,
+                    status: 200
+                })
+
+            } catch (error) {
+                res.status(500).json({
+                    message: "Failed to Fetch Data"
+                })
+
+            }
+
+        },
         // below is the username and password
         // userLogin: async (req, res) => {
         //     try {

@@ -928,6 +928,170 @@ const companyCountSchema = new mongoose.Schema({
     },
 });
 
+const productMaterCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
+
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
+const productMasterCreationSchema = new mongoose.Schema({
+
+    productMasterUniqueId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    companyNameORPlant: {
+        type: String,
+        required: true
+    },
+    productCode: {
+        type: String,
+        required: true
+    },
+    productName: {
+        type: String,
+        required: true
+    },
+    materialType: {
+        type: String,
+        required: true
+    },
+    purchasePrice: {
+        type: String,
+        required: true
+    },
+    cogm: {
+        type: String,
+        required: true
+    },
+    salesPrice: {
+        type: String,
+        required: true
+    },
+    igstPer: {
+        type: String,
+        required: true
+    },
+    sgstPer: {
+        type: String,
+        required: true
+    },
+    cgstPer: {
+        type: Number,
+        required: true
+    },
+    selfLifeDays: {
+        type: Number,
+        required: false
+    },
+    batchReq: {
+        type: String,
+        required: true
+    },
+    hsnCode: {
+        type: String,
+        required: true
+    },
+      image: {
+        type: String,
+        required: true
+    },
+     qmReq: {
+        type: String,
+        required: true
+    },
+
+})
+const InventoryManagementCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
+
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
+const InventoryManagementSchema = new mongoose.Schema({
+    
+    inventoryUniqueId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    sourceOfStock: {
+        type: String,
+        required: true,
+    },
+    companyNameORPlant: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    postingDate: {
+        type: Date, // Assuming this should be a Date object
+        required: true
+    },
+    // Row 2
+    productCode: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    productName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    materialType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    // Row 3
+    value: { // Based on the label "Value"
+        type: Number, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    batch: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    sLock: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    availableStock: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    uom: { // Unit of Measurement
+        type: String,
+        required: true,
+        trim: true
+    },
+    // Assuming you'd want created/updated timestamps
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 const Counter = mongoose.model('Counter', counterSchema);
 const User = mongoose.model('User', userSchema);
 const Approval = mongoose.model('Approval', approvalSchema);
@@ -947,8 +1111,14 @@ const chargesCount = mongoose.model('chargeCount', chargesCountSchema)
 const companyCreate = mongoose.model('companyCreation', companyCreationSchema);
 const companyCount = mongoose.model('companyCount', companyCountSchema)
 
+const productCreation = mongoose.model('productmastercreation', productMasterCreationSchema);
+const productCount = mongoose.model('productCount', productMaterCountSchema)
+
+const inventoryCreation = mongoose.model('inventorycreation', InventoryManagementSchema);
+const inventoryCount = mongoose.model('inventoryCount',InventoryManagementCountSchema)
+
 
 
 
 // Export as an object
-module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount };
+module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount,productCreation,productCount,inventoryCreation, inventoryCount};

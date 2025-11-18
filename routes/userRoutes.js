@@ -45,8 +45,16 @@ module.exports = (() => {
     router.post('/invoice/updateFromFundsScreen',userHandler.updateFundsScreen);
 router.post('/invoice/DSC_FileUpload',userHandler.dscfileupload);
 
+router.post('/invoice/SaveProductMaster',userHandler.productmasterCreation);
+router.post('/invoice/updateExitProductMaster',userHandler.productmasterUpdate);
+router.get('/invoice/Get_productMaterList',userHandler.getproductlist);
 
-    console.log('enter route')
+router.post('/invoice/SaveInventory',userHandler.InventorySave);
+router.post('/invoice/updateExitInventory',userHandler.InventoryUpdate);
+router.get('/invoice/Get_InventoryList',userHandler.InventoryList);
+
+
+console.log('enter route')
     // router.post('/', userHandler.createUser);
 
     return router;
