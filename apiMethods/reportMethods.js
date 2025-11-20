@@ -2020,7 +2020,7 @@ module.exports = (() => {
                 const NewproductList = await companyPayload.save()
 
                 res.status(200).json({
-                    message: "New Company Created Successfully",
+                    message: "Product Master Created Successfully",
                     status: 200,
                     data: NewproductList,
                     productMasterUniqueId
@@ -2139,7 +2139,7 @@ module.exports = (() => {
                     inventoryUniqueId
                 })
 
-                const storedData= await companyPayload.save()
+                const storedData = await companyPayload.save()
 
                 res.status(200).json({
                     message: "Stock Entry Created Successfully",
@@ -2203,7 +2203,7 @@ module.exports = (() => {
                 });
             }
         },
-         InventoryList: async (req, res) => {
+        InventoryList: async (req, res) => {
             try {
                 const InventoryList = await inventoryCreation.find()
 
