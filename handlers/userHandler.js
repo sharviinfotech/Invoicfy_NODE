@@ -46,5 +46,9 @@ module.exports = (() => {
         InventorySave: (req, res) => userMethods.InventorySave(req, res),
         InventoryUpdate: (req, res) => userMethods.InventoryUpdate(req, res),
         InventoryList: (req, res) => userMethods.InventoryList(req, res),
+
+        gateentry: (req, res) => userMethods.gateentrySave(req, res),
+        gateupdate: (req, res) => userMethods.gateentryupdate(req, res),
+        FetchGetEntryData: (req, res) => userMethods.FetchGetEntryData(req, res),
     };
 })();

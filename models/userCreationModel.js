@@ -459,7 +459,7 @@ const invoiceSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    uploadType:{
+    uploadType: {
         type: String,
         required: false
     }
@@ -864,7 +864,7 @@ const companyCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-  
+
     companyPincode: {
         type: String,
         required: true
@@ -909,7 +909,7 @@ const companyCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    companyImageUpload:{
+    companyImageUpload: {
         type: String,
         required: false
     }
@@ -999,11 +999,19 @@ const productMasterCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-      image: {
+    uom: {
         type: String,
         required: true
     },
-     qmReq: {
+    slock: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    qmReq: {
         type: String,
         required: true
     },
@@ -1022,7 +1030,7 @@ const InventoryManagementCountSchema = new mongoose.Schema({
     },
 });
 const InventoryManagementSchema = new mongoose.Schema({
-    
+
     inventoryUniqueId: {
         type: Number,
         required: true,
@@ -1091,7 +1099,150 @@ const InventoryManagementSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+const gateentryCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
 
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
+const gateentrySchema = new mongoose.Schema({
+
+    gatEntryUniqueId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    EntryObjectType: {
+        type: String,
+        required: true,
+    },
+    VehicleType: {
+        type: String,
+        required: true,
+    },
+    VehicleEntrydatetime: {
+        type: Date, // Assuming this should be a Date object
+        // required: true
+        default: Date.now
+    },
+    // Row 2
+    VehicleNumber: {
+        type: String,
+        required: true,
+    },
+    DriverName: {
+        type: String,
+        required: true,
+    },
+    DriverContactNO: {
+        type: Number,
+        required: true,
+    },
+    // Row 3
+    DriverId: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    PO: {
+        type: String,
+        required: true,
+    },
+    ProductCode: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    ProductName: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    Quantity: { // Unit of Measurement
+        type: Number,
+        required: true,
+
+    },
+    // Assuming you'd want created/updated timestamps
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now
+    // },
+    // updatedAt: {
+    //     type: Date,
+    //     default: Date.now
+    // }
+    Uom: { // Based on the label "Value"
+        type: Number, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    GatePassNo: {
+        type: String,
+        required: true,
+    },
+    vehicleExitDateTime: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false,
+    },
+    // Row 4
+    visitorType: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    visitorName: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    PurposeofVisit: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    EmployeResponsible: {
+        type: String,
+        required: true,
+    },
+    IdType: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    ImageCapturing: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    ExitDateTime: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    ItemCode: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    SerialNumber: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    // Quantity: { // Based on the label "Value"
+    //     type: Number, // Assuming a monetary value
+    //     required: false // No asterisk in the image
+    // },
+    ResponsiblePerson: {
+        type: String,
+        required: true,
+    },
+    ApproverName: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+
+
+
+
+});
 const Counter = mongoose.model('Counter', counterSchema);
 const User = mongoose.model('User', userSchema);
 const Approval = mongoose.model('Approval', approvalSchema);
@@ -1115,10 +1266,11 @@ const productCreation = mongoose.model('productmastercreation', productMasterCre
 const productCount = mongoose.model('productCount', productMaterCountSchema)
 
 const inventoryCreation = mongoose.model('inventorycreation', InventoryManagementSchema);
-const inventoryCount = mongoose.model('inventoryCount',InventoryManagementCountSchema)
+const inventoryCount = mongoose.model('inventoryCount', InventoryManagementCountSchema)
 
-
+const gateentryCreation = mongoose.model('gateEntrycreation', gateentrySchema);
+const gateentryCount = mongoose.model('gateEntryCount', gateentryCountSchema)
 
 
 // Export as an object
-module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount,productCreation,productCount,inventoryCreation, inventoryCount};
+module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount, gateentryCreation, gateentryCount };

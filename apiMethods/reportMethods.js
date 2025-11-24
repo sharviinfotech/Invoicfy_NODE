@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount,
-    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount } = require('../models/userCreationModel');
+    invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount, gateentryCreation, gateentryCount } = require('../models/userCreationModel');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const moment = require('moment');
@@ -1988,7 +1988,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyNameORPlant, productCode, productName, materialType, purchasePrice, cogm, salesPrice, igstPer, sgstPer, cgstPer, selfLifeDays, batchReq, hsnCode, image, qmReq } = req.body;
+                const { companyNameORPlant, productCode, productName, materialType, purchasePrice, cogm, salesPrice, igstPer, sgstPer, cgstPer, selfLifeDays, batchReq, hsnCode, uom, slock, image, qmReq } = req.body;
 
                 const counter = await productCount.findOneAndUpdate(
                     { name: "productMasterUniqueId" },
@@ -2011,6 +2011,8 @@ module.exports = (() => {
                     selfLifeDays,
                     batchReq,
                     hsnCode,
+                    uom,
+                    slock,
                     image,
                     qmReq,
                     productMasterUniqueId
@@ -2230,6 +2232,137 @@ module.exports = (() => {
             }
 
         },
+
+        gateentrySave: async (req, res) => {
+            // console.log("newCompanyCreation ", req, res)
+            console.log("gate entry request received");
+            try {
+
+                const { EntryObjectType, VehicleType, VehicleEntrydatetime, VehicleNumber, DriverName, DriverContactNO, DriverId, PO, ProductCode, ProductName, Quantity, Uom, GatePassNo, vehicleExitDateTime, visitorType, visitorName, PurposeofVisit, EmployeResponsible, IdType, ImageCapturing, ExitDateTime, ItemCode, SerialNumber, ResponsiblePerson, ApproverName, } = req.body;
+
+                const counter = await gateentryCount.findOneAndUpdate(
+                    { name: "gatEntryUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const gatEntryUniqueId = counter.value;
+                console.log("inventoryUniqueId", gatEntryUniqueId);
+                const payload = new gateentryCreation({
+                    EntryObjectType,
+                    VehicleType,
+                    VehicleEntrydatetime,
+                    VehicleNumber,
+                    DriverName,
+                    DriverContactNO,
+                    DriverId,
+                    PO,
+                    ProductCode,
+                    ProductName,
+                    Quantity,
+                    Uom,
+                    GatePassNo,
+                    vehicleExitDateTime,
+                    visitorType,
+                    visitorName,
+                    PurposeofVisit,
+                    EmployeResponsible,
+                    IdType,
+                    ImageCapturing,
+                    ExitDateTime,
+                    ItemCode,
+                    SerialNumber,
+                    ResponsiblePerson,
+                    ApproverName,
+                    gatEntryUniqueId
+                })
+
+                const storedData = await payload.save()
+
+                res.status(200).json({
+                    message: "Gate Entry Created Successfully",
+                    status: 200,
+                    data: storedData,
+                    gatEntryUniqueId
+                })
+
+            } catch (error) {
+                console.error("Error in ::", error);
+                res.status(500).json({
+                    message: "Failed to Save",
+                    status: 500,
+                    error: error.message
+                })
+            }
+        },
+        gateentryupdate: async (req, res) => {
+            console.log("req.params:", req.params, "req.body:", req.body);
+
+            try {
+                const gatEntryUniqueId = req.body.gatEntryUniqueId; // Convert to number
+                if (isNaN(gatEntryUniqueId)) {
+                    return res.status(400).json({
+                        message: "Invalid id",
+                        status: 400
+                    });
+                }
+
+                const updateObj = req.body;
+                console.log("companyUniqueId:", gatEntryUniqueId);
+                console.log("updateObj:", updateObj);
+
+                const updateUserObj = await gateentryCreation.findOneAndUpdate(
+                    { gatEntryUniqueId: gatEntryUniqueId },
+                    { $set: updateObj },
+                    { new: true, runValidators: true }
+                );
+
+                console.log("updateUserObj:", updateUserObj);
+
+                if (!updateUserObj) {
+                    return res.status(404).json({
+                        message: "Gate Entry Not found based on given Id",
+                        status: 404
+                    });
+                }
+
+                res.status(200).json({
+                    message: "Data Updated Successfully",
+                    status: 200,
+                    updatedList: updateUserObj
+                });
+
+            } catch (error) {
+                console.error("Error updating company:", error);
+                res.status(500).json({
+                    message: "Failed to Update",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+        FetchGetEntryData: async (req, res) => {
+            console.log("req.params:", req.params, "req.body:", req.body);
+
+            try {
+                const gatEntryUniqueId = req.body.gatEntryUniqueId; // Convert to number
+                const fetchData = await gateentryCreation.findOne({ gatEntryUniqueId: gatEntryUniqueId })
+
+                res.status(200).json({
+                    message: "Data Fetched Successfully for Gate Entry Number   " + gatEntryUniqueId,
+                    status: 200,
+                    updatedList: fetchData
+                });
+
+            } catch (error) {
+                console.error("Error updating company:", error);
+                res.status(500).json({
+                    message: "Failed to Update",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+
         // below is the username and password
         // userLogin: async (req, res) => {
         //     try {

@@ -10,51 +10,54 @@ module.exports = (() => {
     router.post('/submit/approval', userHandler.submitApproval);
     router.get('/get/approvalList', userHandler.listOfApproval);
 
-    router.post('/invoice/createNewInvoice',userHandler.invoiceCreation)
+    router.post('/invoice/createNewInvoice', userHandler.invoiceCreation)
     router.get('/invoice/countryList', userHandler.countryList);
     router.get('/invoice/stateList', userHandler.stateList);
     router.put('/updateInvoiceByReferenceNo/:referenceNo', userHandler.updateInvoice);
     // router.post('/invoice/getAllInvoices',userHandler.getTotalInvoice);
-    router.get('/invoice/getAllInvoices',userHandler.getTotalInvoice);
-    router.post('/invoice/invoiceTemplate',userHandler.invoiceLayout);
-    router.get('/invoice/getInvoiceLayout',userHandler.getInvoiceLayout)
-    router.post('/invoice/userNewCreation',userHandler.userCreationNew);
-    router.put('/invoice/updateExitUser/:UniqueId',userHandler.updateUserCreation);
-    router.get('/invoice/getAllUserList',userHandler.getAllUser);
-    router.post('/invoice/authenticationLogin',userHandler.submitLogin);
-    router.post('/invoice/invoiceApprovedOrRejected',userHandler.approveOrReject);
-    router.post('/invoice/combinationOfDateAndStatus',userHandler.InvoiceBasedOnDates);
-    router.post('/invoice/SaveCustomerCreation',userHandler.customerCreation);
-    router.put('/invoice/updateExitCustomer/:customerUniqueId',userHandler.customerUpdate);
-    router.get('/invoice/getAllCustomerList',userHandler.getAllCustomer);
-    router.post('/invoice/forgotPassword',userHandler.forgot);
-    router.post('/invoice/SaveCharges',userHandler.chargesCreation);
-    router.post('/invoice/UpdateCharges',userHandler.Updatecharges);
+    router.get('/invoice/getAllInvoices', userHandler.getTotalInvoice);
+    router.post('/invoice/invoiceTemplate', userHandler.invoiceLayout);
+    router.get('/invoice/getInvoiceLayout', userHandler.getInvoiceLayout)
+    router.post('/invoice/userNewCreation', userHandler.userCreationNew);
+    router.put('/invoice/updateExitUser/:UniqueId', userHandler.updateUserCreation);
+    router.get('/invoice/getAllUserList', userHandler.getAllUser);
+    router.post('/invoice/authenticationLogin', userHandler.submitLogin);
+    router.post('/invoice/invoiceApprovedOrRejected', userHandler.approveOrReject);
+    router.post('/invoice/combinationOfDateAndStatus', userHandler.InvoiceBasedOnDates);
+    router.post('/invoice/SaveCustomerCreation', userHandler.customerCreation);
+    router.put('/invoice/updateExitCustomer/:customerUniqueId', userHandler.customerUpdate);
+    router.get('/invoice/getAllCustomerList', userHandler.getAllCustomer);
+    router.post('/invoice/forgotPassword', userHandler.forgot);
+    router.post('/invoice/SaveCharges', userHandler.chargesCreation);
+    router.post('/invoice/UpdateCharges', userHandler.Updatecharges);
     router.get('/invoice/approveorrejectMail', userHandler.approveOrRejectMail);
-    router.get('/invoice/getAllCharges',userHandler.chargesList);
-    router.post('/invoice/reviewedUpadte',userHandler.reviewed);
-    router.post('/invoice/resetPassword',userHandler.reset);
-    router.get('/invoice/getAllNotification',userHandler.notification);
-    router.post('/invoice/verifyedAndUpdated',userHandler.verifyed);
-    router.post('/invoice/deteleGlobal',userHandler.deleteData);
+    router.get('/invoice/getAllCharges', userHandler.chargesList);
+    router.post('/invoice/reviewedUpadte', userHandler.reviewed);
+    router.post('/invoice/resetPassword', userHandler.reset);
+    router.get('/invoice/getAllNotification', userHandler.notification);
+    router.post('/invoice/verifyedAndUpdated', userHandler.verifyed);
+    router.post('/invoice/deteleGlobal', userHandler.deleteData);
 
-    router.post('/invoice/SaveCompanyCreation',userHandler.companyCreation);
-    router.post('/invoice/updateExitCompany',userHandler.companyUpdate);
-    router.get('/invoice/getAllCompanyList',userHandler.getAllCompany);
+    router.post('/invoice/SaveCompanyCreation', userHandler.companyCreation);
+    router.post('/invoice/updateExitCompany', userHandler.companyUpdate);
+    router.get('/invoice/getAllCompanyList', userHandler.getAllCompany);
 
-    router.post('/invoice/updateFromFundsScreen',userHandler.updateFundsScreen);
-router.post('/invoice/DSC_FileUpload',userHandler.dscfileupload);
+    router.post('/invoice/updateFromFundsScreen', userHandler.updateFundsScreen);
+    router.post('/invoice/DSC_FileUpload', userHandler.dscfileupload);
 
-router.post('/invoice/SaveProductMaster',userHandler.productmasterCreation);
-router.post('/invoice/updateExitProductMaster',userHandler.productmasterUpdate);
-router.get('/invoice/Get_productMaterList',userHandler.getproductlist);
+    router.post('/invoice/SaveProductMaster', userHandler.productmasterCreation);
+    router.post('/invoice/updateExitProductMaster', userHandler.productmasterUpdate);
+    router.get('/invoice/Get_productMaterList', userHandler.getproductlist);
 
-router.post('/invoice/SaveInventory',userHandler.InventorySave);
-router.post('/invoice/updateExitInventory',userHandler.InventoryUpdate);
-router.get('/invoice/Get_InventoryList',userHandler.InventoryList);
+    router.post('/invoice/SaveInventory', userHandler.InventorySave);
+    router.post('/invoice/updateExitInventory', userHandler.InventoryUpdate);
+    router.get('/invoice/Get_InventoryList', userHandler.InventoryList);
+
+    router.post('/invoice/SaveGateEntry', userHandler.gateentry);
+    router.post('/invoice/FetchGetEntryData', userHandler.FetchGetEntryData);
 
 
-console.log('enter route')
+    console.log('enter route')
     // router.post('/', userHandler.createUser);
 
     return router;
