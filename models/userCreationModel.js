@@ -1262,6 +1262,11 @@ const InventoryManagementSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    itemUniqueId: {
+        type: String,
+        required: true,
+        unique: true
+    },
     sourceOfStock: {
         type: String,
         required: true,
