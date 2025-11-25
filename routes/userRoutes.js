@@ -55,6 +55,7 @@ module.exports = (() => {
 
     router.post('/invoice/SaveGateEntry', userHandler.gateentry);
     router.post('/invoice/FetchGetEntryData', userHandler.FetchGetEntryData);
+    router.post('/invoice/gateentryupdate', userHandler.updategateEntry);
 
 
     console.log('enter route')

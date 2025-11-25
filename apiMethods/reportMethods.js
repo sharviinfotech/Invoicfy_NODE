@@ -1988,7 +1988,7 @@ module.exports = (() => {
             console.log("newCompanyCreation request received");
             try {
 
-                const { companyNameORPlant, productCode, productName, materialType, purchasePrice, cogm, salesPrice, igstPer, sgstPer, cgstPer, selfLifeDays, batchReq, hsnCode, uom, slock, image, qmReq } = req.body;
+                const { companyNameORPlant, productCode, productName, materialType, purchasePrice, cogm, salesPrice, igstPer, sgstPer, cgstPer, selfLifeDays, batchReq, hsnCode, uom, sLock, image, qmReq } = req.body;
 
                 const counter = await productCount.findOneAndUpdate(
                     { name: "productMasterUniqueId" },
@@ -2012,7 +2012,7 @@ module.exports = (() => {
                     batchReq,
                     hsnCode,
                     uom,
-                    slock,
+                    sLock,
                     image,
                     qmReq,
                     productMasterUniqueId
@@ -2110,55 +2110,55 @@ module.exports = (() => {
             }
 
         },
-        InventorySave: async (req, res) => {
-            // console.log("newCompanyCreation ", req, res)
-            console.log("newCompanyCreation request received");
-            try {
+        // InventorySave: async (req, res) => {
+        //     // console.log("newCompanyCreation ", req, res)
+        //     console.log("newCompanyCreation request received");
+        //     try {
 
-                const { sourceOfStock, companyNameORPlant, postingDate, productCode, productName, materialType, value, batch, sLock, availableStock, uom, createdAt, updatedAt } = req.body;
+        //         const { sourceOfStock, companyNameORPlant, postingDate, productCode, productName, materialType, value, batch, sLock, availableStock, uom, createdAt, updatedAt } = req.body;
 
-                const counter = await inventoryCount.findOneAndUpdate(
-                    { name: "inventoryUniqueId" },
-                    { $inc: { value: 1 } },
-                    { new: true, upsert: true, setDefaultsOnInsert: true }
-                );
-                const inventoryUniqueId = counter.value;
-                console.log("inventoryUniqueId", inventoryUniqueId);
-                const companyPayload = new inventoryCreation({
-                    sourceOfStock,
-                    companyNameORPlant,
-                    postingDate,
-                    productCode,
-                    productName,
-                    materialType,
-                    value,
-                    batch,
-                    sLock,
-                    availableStock,
-                    uom,
-                    createdAt,
-                    updatedAt,
-                    inventoryUniqueId
-                })
+        //         const counter = await inventoryCount.findOneAndUpdate(
+        //             { name: "inventoryUniqueId" },
+        //             { $inc: { value: 1 } },
+        //             { new: true, upsert: true, setDefaultsOnInsert: true }
+        //         );
+        //         const inventoryUniqueId = counter.value;
+        //         console.log("inventoryUniqueId", inventoryUniqueId);
+        //         const companyPayload = new inventoryCreation({
+        //             sourceOfStock,
+        //             companyNameORPlant,
+        //             postingDate,
+        //             productCode,
+        //             productName,
+        //             materialType,
+        //             value,
+        //             batch,
+        //             sLock,
+        //             availableStock,
+        //             uom,
+        //             createdAt,
+        //             updatedAt,
+        //             inventoryUniqueId
+        //         })
 
-                const storedData = await companyPayload.save()
+        //         const storedData = await companyPayload.save()
 
-                res.status(200).json({
-                    message: "Stock Entry Created Successfully",
-                    status: 200,
-                    data: storedData,
-                    inventoryUniqueId
-                })
+        //         res.status(200).json({
+        //             message: "Stock Entry Created Successfully",
+        //             status: 200,
+        //             data: storedData,
+        //             inventoryUniqueId
+        //         })
 
-            } catch (error) {
-                console.error("Error in ::", error);
-                res.status(500).json({
-                    message: "Failed to Save",
-                    status: 500,
-                    error: error.message
-                })
-            }
-        },
+        //     } catch (error) {
+        //         console.error("Error in ::", error);
+        //         res.status(500).json({
+        //             message: "Failed to Save",
+        //             status: 500,
+        //             error: error.message
+        //         })
+        //     }
+        // },
         InventoryUpdate: async (req, res) => {
             console.log("req.params:", req.params, "req.body:", req.body);
 
@@ -2205,6 +2205,56 @@ module.exports = (() => {
                 });
             }
         },
+        InventorySave: async (req, res) => {
+            try {
+                const items = Array.isArray(req.body) ? req.body : [req.body];
+
+                const invCounter = await inventoryCount.findOneAndUpdate(
+                    { name: "inventoryUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const inventoryUniqueId = invCounter.value;
+
+                let results = [];
+
+                for (let i = 0; i < items.length; i++) {
+
+                    const itemCounter = await inventoryCount.findOneAndUpdate(
+                        { name: "itemUniqueId" },
+                        { $inc: { value: 1 } },
+                        { new: true, upsert: true, setDefaultsOnInsert: true }
+                    );
+
+                    const itemNumber = itemCounter.value;
+                    const itemUniqueId = "IM" + itemNumber.toString().padStart(3, "0");
+
+                    const payload = new inventoryCreation({
+                        ...items[i],
+                        inventoryUniqueId,  // SAME for the batch
+                        itemUniqueId        // UNIQUE for each item
+                    });
+
+                    const stored = await payload.save();
+                    results.push(stored);
+                }
+
+                return res.status(200).json({
+                    message: "Stock Entry Created Successfully",
+                    status: 200,
+                    data: results,
+                    inventoryUniqueId
+                });
+
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({
+                    message: "Failed to Save",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
         InventoryList: async (req, res) => {
             try {
                 const InventoryList = await inventoryCreation.find()
@@ -2232,7 +2282,56 @@ module.exports = (() => {
             }
 
         },
+        // InventorySave: async (req, res) => {
 
+        //     // console.log("newCompanyCreation ", req, res)
+        //     console.log("newCompanyCreation request received");
+        //     try {
+
+        //         const { sourceOfStock, companyNameORPlant, postingDate, productCode, productName, materialType, value, batch, sLock, availableStock, uom, createdAt, updatedAt } = req.body;
+
+        //         const counter = await inventoryCount.findOneAndUpdate(
+        //             { name: "inventoryUniqueId" },
+        //             { $inc: { value: 1 } },
+        //             { new: true, upsert: true, setDefaultsOnInsert: true }
+        //         );
+        //         const inventoryUniqueId = counter.value;
+        //         console.log("inventoryUniqueId", inventoryUniqueId);
+        //         const companyPayload = new inventoryCreation({
+        //             sourceOfStock,
+        //             companyNameORPlant,
+        //             postingDate,
+        //             productCode,
+        //             productName,
+        //             materialType,
+        //             value,
+        //             batch,
+        //             sLock,
+        //             availableStock,
+        //             uom,
+        //             createdAt,
+        //             updatedAt,
+        //             inventoryUniqueId
+        //         })
+
+        //         const storedData = await companyPayload.save()
+
+        //         res.status(200).json({
+        //             message: "Stock Entry Created Successfully",
+        //             status: 200,
+        //             data: storedData,
+        //             inventoryUniqueId
+        //         })
+
+        //     } catch (error) {
+        //         console.error("Error in ::", error);
+        //         res.status(500).json({
+        //             message: "Failed to Save",
+        //             status: 500,
+        //             error: error.message
+        //         })
+        //     }
+        // },
         gateentrySave: async (req, res) => {
             // console.log("newCompanyCreation ", req, res)
             console.log("gate entry request received");

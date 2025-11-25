@@ -50,5 +50,6 @@ module.exports = (() => {
         gateentry: (req, res) => userMethods.gateentrySave(req, res),
         gateupdate: (req, res) => userMethods.gateentryupdate(req, res),
         FetchGetEntryData: (req, res) => userMethods.FetchGetEntryData(req, res),
+        updategateEntry: (req, res) => userMethods.gateentryupdate(req, res),
     };
 })();

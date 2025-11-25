@@ -1003,7 +1003,7 @@ const productMasterCreationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    slock: {
+    sLock: {
         type: String,
         required: true
     },
@@ -1017,88 +1017,88 @@ const productMasterCreationSchema = new mongoose.Schema({
     },
 
 })
-const InventoryManagementCountSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: false,
-        unique: true,
-    },
+// const InventoryManagementCountSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: false,
+//         unique: true,
+//     },
 
-    value: {
-        type: Number,
-        default: 800,
-    },
-});
-const InventoryManagementSchema = new mongoose.Schema({
+//     value: {
+//         type: Number,
+//         default: 800,
+//     },
+// });
+// const InventoryManagementSchema = new mongoose.Schema({
 
-    inventoryUniqueId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    sourceOfStock: {
-        type: String,
-        required: true,
-    },
-    companyNameORPlant: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    postingDate: {
-        type: Date, // Assuming this should be a Date object
-        required: true
-    },
-    // Row 2
-    productCode: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    productName: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    materialType: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    // Row 3
-    value: { // Based on the label "Value"
-        type: Number, // Assuming a monetary value
-        required: false // No asterisk in the image
-    },
-    batch: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    sLock: {
-        type: String, // Based on the placeholder "Enter email"
-        required: false // No asterisk in the image
-    },
-    // Row 4
-    availableStock: {
-        type: Number, // Assuming a quantity/stock count
-        required: true
-    },
-    uom: { // Unit of Measurement
-        type: String,
-        required: true,
-        trim: true
-    },
-    // Assuming you'd want created/updated timestamps
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+//     inventoryUniqueId: {
+//         type: Number,
+//         required: true,
+//         unique: true
+//     },
+//     sourceOfStock: {
+//         type: String,
+//         required: true,
+//     },
+//     companyNameORPlant: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     postingDate: {
+//         type: Date, // Assuming this should be a Date object
+//         required: true
+//     },
+//     // Row 2
+//     productCode: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     productName: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     materialType: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     // Row 3
+//     value: { // Based on the label "Value"
+//         type: Number, // Assuming a monetary value
+//         required: false // No asterisk in the image
+//     },
+//     batch: {
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     sLock: {
+//         type: String, // Based on the placeholder "Enter email"
+//         required: false // No asterisk in the image
+//     },
+//     // Row 4
+//     availableStock: {
+//         type: Number, // Assuming a quantity/stock count
+//         required: true
+//     },
+//     uom: { // Unit of Measurement
+//         type: String,
+//         required: true,
+//         trim: true
+//     },
+//     // Assuming you'd want created/updated timestamps
+//     createdAt: {
+//         type: Date,
+//         default: Date.now
+//     },
+//     updatedAt: {
+//         type: Date,
+//         default: Date.now
+//     }
+// });
 const gateentryCountSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -1242,6 +1242,88 @@ const gateentrySchema = new mongoose.Schema({
 
 
 
+});
+const InventoryManagementCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
+
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
+const InventoryManagementSchema = new mongoose.Schema({
+
+    inventoryUniqueId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    sourceOfStock: {
+        type: String,
+        required: true,
+    },
+    companyNameORPlant: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    postingDate: {
+        type: Date, // Assuming this should be a Date object
+        required: true
+    },
+    // Row 2
+    productCode: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    productName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    materialType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    // Row 3
+    value: { // Based on the label "Value"
+        type: Number, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    batch: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    sLock: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    availableStock: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    uom: { // Unit of Measurement
+        type: String,
+        required: true,
+        trim: true
+    },
+    // Assuming you'd want created/updated timestamps
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 const Counter = mongoose.model('Counter', counterSchema);
 const User = mongoose.model('User', userSchema);
