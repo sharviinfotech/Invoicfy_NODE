@@ -1328,6 +1328,10 @@ const InventoryManagementSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+    },
+    partialDelete:{
+        type: String, 
+        required: false
     }
 });
 const Counter = mongoose.model('Counter', counterSchema);

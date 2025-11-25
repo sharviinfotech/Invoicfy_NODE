@@ -58,7 +58,8 @@ module.exports = (() => {
     router.post('/invoice/gateentryupdate', userHandler.updategateEntry);
 
 
-    console.log('enter route')
+    console.log('enter route');
+     router.post('/invoice/partialDeteleGlobal', userHandler.partialDeteleGlobal);
     // router.post('/', userHandler.createUser);
 
     return router;

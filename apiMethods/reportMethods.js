@@ -1793,6 +1793,48 @@ module.exports = (() => {
                 res.status(500).json({ message: "Deletion failed", status: 500, error: error.message });
             }
         },
+        partialDeteleGlobal: async (req, res) => {
+            try {
+                const { globalId, screenName } = req.body;
+
+                if (!globalId || !screenName) {
+                    return res.status(400).json({ message: "Missing required fields", status: 400 });
+                }
+
+                let result;
+
+                switch (screenName) {
+                    case "totalstock&inventorylist":
+                        result = await inventoryCreation.updateMany(
+                            { inventoryUniqueId: globalId },
+                            { $set: { partialDelete: "X" } }
+                        );
+                        break;
+
+                    default:
+                        return res.status(400).json({ message: "Invalid table type", status: 400 });
+                }
+
+                if (result.modifiedCount === 0) {
+                    return res.status(404).json({ message: "No records found", status: 404 });
+                }
+
+                res.status(200).json({
+                    message: "Records updated with partial delete",
+                    status: 200,
+                    modified: result.modifiedCount
+                });
+
+            } catch (error) {
+                res.status(500).json({
+                    message: "Deletion failed",
+                    status: 500,
+                    error: error.message
+                });
+            }
+        },
+
+
         newCompanyCreation: async (req, res) => {
             // console.log("newCompanyCreation ", req, res)
             console.log("newCompanyCreation request received");
@@ -2232,7 +2274,8 @@ module.exports = (() => {
                     const payload = new inventoryCreation({
                         ...items[i],
                         inventoryUniqueId,  // SAME for the batch
-                        itemUniqueId        // UNIQUE for each item
+                        itemUniqueId,     // UNIQUE for each item
+                        partialDelete: ""
                     });
 
                     const stored = await payload.save();

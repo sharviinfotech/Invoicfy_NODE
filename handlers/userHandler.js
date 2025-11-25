@@ -33,6 +33,7 @@ module.exports = (() => {
         notification: (req, res) => userMethods.getNotification(req, res),
         verifyed: (req, res) => userMethods.verifyedAndUpdated(req, res),
         deleteData: (req, res) => userMethods.deleteGlobally(req, res),
+        
         companyCreation: (req, res) => userMethods.newCompanyCreation(req, res),
         companyUpdate: (req, res) => userMethods.updateCompany(req, res),
         getAllCompany: (req, res) => userMethods.listOfCompany(req, res),
@@ -51,5 +52,7 @@ module.exports = (() => {
         gateupdate: (req, res) => userMethods.gateentryupdate(req, res),
         FetchGetEntryData: (req, res) => userMethods.FetchGetEntryData(req, res),
         updategateEntry: (req, res) => userMethods.gateentryupdate(req, res),
+
+        partialDeteleGlobal:(req, res) => userMethods.partialDeteleGlobal(req, res),
     };
 })();
