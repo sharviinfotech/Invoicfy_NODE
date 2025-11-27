@@ -1216,7 +1216,7 @@ const gateentrySchema = new mongoose.Schema({
     },
     ExitDateTime: { // Unit of Measurement
         type: String,
-        required: true,
+        required: false,
     },
     ItemCode: {
         type: Number, // Assuming a quantity/stock count
@@ -1329,8 +1329,8 @@ const InventoryManagementSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    partialDelete:{
-        type: String, 
+    partialDelete: {
+        type: String,
         required: false
     }
 });
