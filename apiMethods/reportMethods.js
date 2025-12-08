@@ -11,6 +11,7 @@ const { sendTaxInvoiceList } = require('../fetchInvoiceFolder/sendTaxMails')
 const { sendInvoiceDataToEmail } = require('../fetchInvoiceFolder/sendInvoiceToMail')
 
 
+
 module.exports = (() => {
     return {
         createUser: async (req, res) => {
@@ -163,7 +164,7 @@ module.exports = (() => {
                     invoiceApprovedOrRejectedDateAndTime, loggedInUser, status, proformaCardHeaderId, proformaCardHeaderName,
                     reviewedDescription, reviewedDate, reviewedLoggedIn, createdByUser, reviewed, reviewedReSubmited, pqSameforTAX,
                     pqStatus, pqUniqueId, ProformaBankAccountNumber, ProformaIFSCcode, ProformaBranch, ProformaTypeOfServices, detailsCardAddress,
-                    companyState, state_Code, customerplaceOfSupply, ProformaCompanyName
+                    companyState, state_Code, customerplaceOfSupply, ProformaCompanyName, companyImageUpload
                     , fundsRecievedDate, refUTR, actualAmountReceived, DSC_Status, DSC_UploadFile, uploadType } = req.body
                 console.info("req.body 1", req.body)
                 // below is the proforma invoice
@@ -342,6 +343,7 @@ module.exports = (() => {
                     invoiceHeader: header.invoiceHeader,
                     invoiceImage: header.invoiceImage,
                     ProformaCompanyName: header.ProformaCompanyName,
+                    companyImageUpload: header.companyImageUpload,
                     ProformaCustomerName: header.ProformaCustomerName,
                     ProformaAddress: header.ProformaAddress,
                     ProformaCity: header.ProformaCity,
@@ -350,6 +352,7 @@ module.exports = (() => {
                     ProformaGstNo: header.ProformaGstNo,
                     ProformaPanNO: header.ProformaPanNO,
                     ProformaPoNumber: header.ProformaPoNumber,
+                    ProformaInvoiceType: header.ProformaInvoiceType,
                     ProformaInvoiceNumber: header.ProformaInvoiceNumber,
                     ProformaInvoiceDate: invoiceDateObj,
                     ProformaPan: header.ProformaPan,
@@ -414,6 +417,7 @@ module.exports = (() => {
                     customerplaceOfSupply,
                     state_Code,
                     ProformaCompanyName,
+                    companyImageUpload,
                     // companyBankAccountType,
                     fundsRecievedDate,
                     refUTR,
@@ -435,6 +439,9 @@ module.exports = (() => {
                     console.log("OnlyTAX")
                     const email = "sunilkumar@sharviinfotech.com";
                     await sendTaxInvoiceList(email, JSON.stringify(invoiceData, null, 2));
+
+
+
                 }
                 if (savedInvoice.proformaCardHeaderId === "PQ") {
                     console.log("OnlyTAX")
@@ -568,6 +575,7 @@ module.exports = (() => {
                     { $set: updateData }, // Apply updates
                     { new: true, runValidators: true }
                 );
+
 
                 if (!updatedInvoice) {
                     return res.status(400).json({
@@ -1778,6 +1786,10 @@ module.exports = (() => {
                     case "company":
                         deletedRecord = await companyCreate.findOneAndDelete({ companyUniqueId: globalId });
                         break;
+                    case "product":
+                        deletedRecord = await productCreation.findOneAndDelete({ productMasterUniqueId: globalId });
+                        break;
+
                     default:
                         return res.status(400).json({ message: "Invalid table type", status: 400 });
                 }
@@ -2079,11 +2091,57 @@ module.exports = (() => {
                 })
             }
         },
+        // updateProductmaster: async (req, res) => {
+        //     console.log("req.params:", req.params, "req.body:", req.body);
+
+        //     try {
+        //         const productMasterUniqueId = Number(req.body.productMasterUniqueId); // Convert to number
+        //         if (isNaN(productMasterUniqueId)) {
+        //             return res.status(400).json({
+        //                 message: "Invalid Customer ID",
+        //                 status: 400
+        //             });
+        //         }
+
+        //         const updateObj = req.body;
+        //         console.log("companyUniqueId:", productMasterUniqueId);
+        //         console.log("updateObj:", updateObj);
+
+        //         const updateUserObj = await productCreation.findOneAndUpdate(
+        //             { productMasterUniqueId: productMasterUniqueId },
+        //             { $set: updateObj },
+        //             { new: true, runValidators: true }
+        //         );
+
+        //         console.log("updateUserObj:", updateUserObj);
+
+        //         if (!updateUserObj) {
+        //             return res.status(404).json({
+        //                 message: "Company Not Found",
+        //                 status: 404
+        //             });
+        //         }
+
+        //         res.status(200).json({
+        //             message: "Product master Data Updated Successfully",
+        //             status: 200,
+        //             updatedList: updateUserObj
+        //         });
+
+        //     } catch (error) {
+        //         console.error("Error updating company:", error);
+        //         res.status(500).json({
+        //             message: "Failed to Update Company",
+        //             status: 500,
+        //             error: error.message
+        //         });
+        //     }
+        // },
         updateProductmaster: async (req, res) => {
             console.log("req.params:", req.params, "req.body:", req.body);
 
             try {
-                const productMasterUniqueId = Number(req.body.productMasterUniqueId); // Convert to number
+                const productMasterUniqueId = Number(req.body.productMasterUniqueId);
                 if (isNaN(productMasterUniqueId)) {
                     return res.status(400).json({
                         message: "Invalid Customer ID",
@@ -2092,39 +2150,57 @@ module.exports = (() => {
                 }
 
                 const updateObj = req.body;
-                console.log("companyUniqueId:", productMasterUniqueId);
+                console.log("productMasterUniqueId:", productMasterUniqueId);
                 console.log("updateObj:", updateObj);
 
+                // 1️⃣ Update Product Master
                 const updateUserObj = await productCreation.findOneAndUpdate(
                     { productMasterUniqueId: productMasterUniqueId },
                     { $set: updateObj },
                     { new: true, runValidators: true }
                 );
 
-                console.log("updateUserObj:", updateUserObj);
-
                 if (!updateUserObj) {
                     return res.status(404).json({
-                        message: "Company Not Found",
+                        message: "Product Not Found",
                         status: 404
                     });
                 }
 
+                // 2️⃣ Update Inventory Records Related to Product
+                await inventoryCreation.updateMany(
+                    { productCode: updateObj.productCode },
+                    {
+                        $set: {
+                            productName: updateObj.productName,
+                            uom: updateObj.uom,
+                            sLock: updateObj.sLock,
+                            hsnCode: updateObj.hsnCode,
+                            salesPrice: updateObj.salesPrice,
+                            batchReq: updateObj.batchReq,
+                            qmReq: updateObj.qmReq
+                        }
+                    }
+                );
+
+
+                // 3️⃣ Send Response
                 res.status(200).json({
-                    message: "Product master Data Updated Successfully",
+                    message: "Product master & Inventory Updated Successfully",
                     status: 200,
                     updatedList: updateUserObj
                 });
 
             } catch (error) {
-                console.error("Error updating company:", error);
+                console.error("Error updating product:", error);
                 res.status(500).json({
-                    message: "Failed to Update Company",
+                    message: "Failed to Update Product",
                     status: 500,
                     error: error.message
                 });
             }
         },
+
         listOfProduct: async (req, res) => {
             try {
                 const productList = await productCreation.find()
@@ -2502,6 +2578,94 @@ module.exports = (() => {
                     status: 500,
                     error: error.message
                 });
+            }
+        },
+
+        equipmentmasterSave: async (req, res) => {
+            // console.log("newCompanyCreation ", req, res)
+            console.log("gate entry request received");
+            try {
+
+                const { Equipmentid, EquipmentDescription, Equipmentcategory, EquipmentType, Status, FunctionalLocation, ParentEquipment, organizationCostCenter, ModelNumber, SerialNumber, AssetID, QRCode, Plant, MaintanancePlant, FunctionaldataLocation, Room, GpsLocation, ResponsibleDepartment, CostCenter, PlannerGroup, WorkCenter, MaintananceStrategy, MaintanancePlanId, WarantyStartDate, WarantyEndDate, AMC, AMCStartDate, AMCEndDate, PowerRating, Voltage, PresureRating, Capacity, Speed, Weight, Dimensions, Additionalcustomspec, InstallationDate, CommissionDate, LastMaintenanceDate, NextDueMaintenance, TotalBreakDownCount, TotalDownTimeHours, MeterType, CurrentReading, LastReadingDate, Threshold, SOPDocuments, MaintenanceManuals, Images, Drawings,
+                } = req.body;
+
+                const counter = await equipmentmasterUniqueId.findOneAndUpdate(
+                    { name: "equipmentmasterUniqueId" },
+                    { $inc: { value: 1 } },
+                    { new: true, upsert: true, setDefaultsOnInsert: true }
+                );
+                const equipmentmasterUniqueId = counter.value;
+                console.log("inventoryUniqueId", equipmentmasterUniqueId);
+                const payload = new equipmentmasterCreation({
+                    Equipmentid,
+                    EquipmentDescription,
+                    Equipmentcategory,
+                    EquipmentType,
+                    Status,
+                    FunctionalLocation,
+                    ParentEquipment,
+                    CostCenter,
+                    ModelNumber,
+                    SerialNumber,
+                    AssetID,
+                    QRCode,
+                    Plant,
+                    MaintanancePlant,
+                    FunctionaldataLocation,
+                    Room,
+                    GpsLocation,
+                    ResponsibleDepartment,
+                    organizationCostCenter,
+                    PlannerGroup,
+                    WorkCenter,
+                    MaintananceStrategy,
+                    MaintanancePlanId,
+                    WarantyStartDate,
+                    WarantyEndDate,
+                    AMC,
+                    AMCStartDate,
+                    AMCEndDate,
+                    PowerRating,
+                    Voltage,
+                    PresureRating,
+                    Capacity,
+                    Speed,
+                    Weight,
+                    Dimensions,
+                    Additionalcustomspec,
+                    InstallationDate,
+                    CommissionDate,
+                    LastMaintenanceDate,
+                    NextDueMaintenance,
+                    TotalBreakDownCount,
+                    TotalDownTimeHours,
+                    MeterType,
+                    CurrentReading,
+                    LastReadingDate,
+                    Threshold,
+                    SOPDocuments,
+                    MaintenanceManuals,
+                    Images,
+                    Drawings,
+                    gatEntryUniqueId
+                })
+
+                const storedData = await payload.save()
+
+                res.status(200).json({
+                    message: "Gate Entry Created Successfully",
+                    status: 200,
+                    data: storedData,
+                    gatEntryUniqueId
+                })
+
+            } catch (error) {
+                console.error("Error in ::", error);
+                res.status(500).json({
+                    message: "Failed to Save",
+                    status: 500,
+                    error: error.message
+                })
             }
         },
 

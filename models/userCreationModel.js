@@ -262,6 +262,11 @@ const invoiceSchema = new mongoose.Schema({
             required: true,
         },
 
+        companyImageUpload: {
+            type: String,
+            required: true,
+        },
+
         ProformaCustomerName: {
             type: String,
             required: true,
@@ -291,6 +296,10 @@ const invoiceSchema = new mongoose.Schema({
             required: true,
         },
         ProformaPoNumber: {
+            type: String,
+            required: false,
+        },
+        ProformaInvoiceType: {
             type: String,
             required: false,
         },
@@ -1303,7 +1312,7 @@ const InventoryManagementSchema = new mongoose.Schema({
     },
     batch: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     sLock: {
@@ -1334,6 +1343,266 @@ const InventoryManagementSchema = new mongoose.Schema({
         required: false
     }
 });
+const equipmentmasterCountSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: false,
+        unique: true,
+    },
+
+    value: {
+        type: Number,
+        default: 800,
+    },
+});
+const equipmentmasterSchema = new mongoose.Schema({
+
+    equipmentmasterUniqueId: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    Equipmentid: {
+        type: String,
+        required: true,
+    },
+    EquipmentDescription: {
+        type: String,
+        required: true,
+    },
+    Equipmentcategory: {
+        type: String,
+        required: true,
+    },
+    // Row 2
+    EquipmentType: {
+        type: String,
+        required: true,
+    },
+    Status: {
+        type: String,
+        required: true,
+    },
+    FunctionalLocation: {
+        type: Number,
+        required: true,
+    },
+    // Row 3
+    ParentEquipment: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    CostCenter: {
+        type: String,
+        required: true,
+    },
+    ModelNumber: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    SerialNumber: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    AssetID: { // Unit of Measurement
+        type: Number,
+        required: true,
+
+    },
+    // Assuming you'd want created/updated timestamps
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now
+    // },
+    // updatedAt: {
+    //     type: Date,
+    //     default: Date.now
+    // }
+    QRCode: { // Based on the label "Value"
+        type: Number, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    Plant: {
+        type: String,
+        required: true,
+    },
+    MaintanancePlant: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false,
+    },
+    // Row 4
+    FunctionaldataLocation: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    Room: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    GpsLocation: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    ResponsibleDepartment: {
+        type: String,
+        required: true,
+    },
+    organizationCostCenter: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    PlannerGroup: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    WorkCenter: { // Unit of Measurement
+        type: String,
+        required: false,
+    },
+    MaintananceStrategy: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    MaintanancePlanId: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    // Quantity: { // Based on the label "Value"
+    //     type: Number, // Assuming a monetary value
+    //     required: false // No asterisk in the image
+    // },
+    WarantyStartDate: {
+        type: String,
+        required: true,
+    },
+    WarantyEndDate: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+
+
+    AMC: {
+        type: String,
+        required: true,
+    },
+    AMCStartDate: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false,
+    },
+    // Row 4
+    AMCEndDate: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    PowerRating: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    Voltage: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    PresureRating: {
+        type: String,
+        required: true,
+    },
+    Capacity: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    Speed: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    Weight: { // Unit of Measurement
+        type: String,
+        required: false,
+    },
+    Dimensions: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    Additionalcustomspec: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    // Quantity: { // Based on the label "Value"
+    //     type: Number, // Assuming a monetary value
+    //     required: false // No asterisk in the image
+    // },
+    InstallationDate: {
+        type: String,
+        required: true,
+    },
+    CommissionDate: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    LastMaintenanceDate: {
+        type: String,
+        required: true,
+    },
+    NextDueMaintenance: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false,
+    },
+    // Row 4
+    TotalBreakDownCount: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    TotalDownTimeHours: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    MeterType: { // Based on the label "Value"
+        type: String, // Assuming a monetary value
+        required: false // No asterisk in the image
+    },
+    CurrentReading: {
+        type: String,
+        required: true,
+    },
+    LastReadingDate: {
+        type: String, // Based on the placeholder "Enter email"
+        required: false // No asterisk in the image
+    },
+    // Row 4
+    Threshold: {
+        type: String, // Assuming a quantity/stock count
+        required: true
+    },
+    SOPDocuments: { // Unit of Measurement
+        type: String,
+        required: false,
+    },
+    MaintenanceManuals: {
+        type: Number, // Assuming a quantity/stock count
+        required: true
+    },
+    Images: { // Unit of Measurement
+        type: String,
+        required: true,
+    },
+    // Quantity: { // Based on the label "Value"
+    //     type: Number, // Assuming a monetary value
+    //     required: false // No asterisk in the image
+    // },
+    Drawings: {
+        type: String,
+        required: true,
+    },
+
+
+
+
+
+
+
+});
 const Counter = mongoose.model('Counter', counterSchema);
 const User = mongoose.model('User', userSchema);
 const Approval = mongoose.model('Approval', approvalSchema);
@@ -1362,6 +1631,9 @@ const inventoryCount = mongoose.model('inventoryCount', InventoryManagementCount
 const gateentryCreation = mongoose.model('gateEntrycreation', gateentrySchema);
 const gateentryCount = mongoose.model('gateEntryCount', gateentryCountSchema)
 
+const equipmentmasterCreation = mongoose.model('equipmentmasterCreation', equipmentmasterCountSchema);
+const equipmentmasterCount = mongoose.model(' equipmentmasterCount', equipmentmasterSchema)
+
 
 // Export as an object
-module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount, gateentryCreation, gateentryCount };
+module.exports = { User, Approval, Counter, invoice, countries, statee, layout, invoiceproformaCount, invoicetaxCount, uniqueId, userCreation, userCount, customerCreation, customerCount, chargesCreation, chargesCount, companyCreate, companyCount, productCreation, productCount, inventoryCreation, inventoryCount, gateentryCreation, gateentryCount, equipmentmasterCount, equipmentmasterCreation };

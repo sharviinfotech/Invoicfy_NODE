@@ -57,9 +57,9 @@ module.exports = (() => {
     router.post('/invoice/FetchGetEntryData', userHandler.FetchGetEntryData);
     router.post('/invoice/gateentryupdate', userHandler.updategateEntry);
 
-
+    router.post('/invoice/SaveEquipmentmaster', userHandler.equipmentmaster);
     console.log('enter route');
-     router.post('/invoice/partialDeteleGlobal', userHandler.partialDeteleGlobal);
+    router.post('/invoice/partialDeteleGlobal', userHandler.partialDeteleGlobal);
     // router.post('/', userHandler.createUser);
 
     return router;
