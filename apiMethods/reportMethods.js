@@ -326,6 +326,45 @@ module.exports = (() => {
 
                     console.log("start", start, "invoiceUniqueNumber", invoiceUniqueNumber);
 
+                    if (header.ProformaInvoiceType === "only product") {
+                        const InventoryList = await inventoryCreation.find();
+
+                        // First, validate all items
+                        for (const serviceItem of serviceList) {
+                            const productName = serviceItem.productName;
+                            const qty = serviceItem.quantity;
+
+                            const inventoryItem = InventoryList.find(inv => inv.productName === productName);
+
+                            if (!inventoryItem) {
+                                return res.status(400).json({
+                                    message: `Inventory record not found for product: ${productName}`
+                                });
+                            }
+                           console.log('inventoryItem',inventoryItem)
+                            if (qty > inventoryItem.availableStock) {
+                                return res.status(400).json({
+                                    status: 400,
+                                    message: `${productName}: Entered quantity (${qty}) is more than available stock (${inventoryItem.availableStock})`
+                                });
+                            }
+                        }
+
+                        // If validation passed → Now update stocks
+                        for (const serviceItem of serviceList) {
+                            const productName = serviceItem.productName;
+                            const qty = serviceItem.quantity;
+
+                            await inventoryCreation.updateOne(
+                                { productName: productName },
+                                { $inc: { availableStock: -qty } }
+                            );
+                        }
+                    }
+
+
+
+
                 }
 
                 // Get and increment the SINGLE counter
@@ -352,6 +391,7 @@ module.exports = (() => {
                     ProformaPoNumber: header.ProformaPoNumber,
                     ProformaInvoiceNumber: header.ProformaInvoiceNumber,
                     ProformaInvoiceDate: invoiceDateObj,
+                    ProformaInvoiceType:header.ProformaInvoiceType,
                     ProformaPan: header.ProformaPan,
                     ProformaGstNumber: header.ProformaGstNumber,
                     ProformaTypeOfServices: header.ProformaTypeOfServices,

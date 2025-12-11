@@ -205,6 +205,18 @@ const serviceSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    selectedObjId:{
+        type: Number,
+        required: false,
+    },
+      purchasePrice:{
+        type: Number,
+        required: false,
+    },
+      availableStock:{
+        type: Number,
+        required: false,
+    }
 })
 const taxSchema = new mongoose.Schema({
     description: {
@@ -301,6 +313,10 @@ const invoiceSchema = new mongoose.Schema({
         ProformaInvoiceDate: {
             type: Date,
             required: true,
+        },
+        ProformaInvoiceType:{
+             type: String,
+            required: false,
         },
         ProformaPan: {
             type: String,
